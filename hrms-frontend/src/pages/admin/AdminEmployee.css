@@ -1,0 +1,79 @@
+.ad_ul_container {
+    padding: 2rem;
+    background-color: #f9f9f9;
+    min-height: 100vh;
+  }
+  
+  .ad_ul_title {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: #333;
+  }
+  
+  .ad_ul_controls {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  
+  .ad_ul_controls input,
+  .ad_ul_controls select {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+  }
+  
+  .ad_ul_controls button {
+    padding: 0.5rem 1.2rem;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .ad_ul_controls button:hover {
+    background-color: #2980b9;
+  }
+  
+  .ad_ul_listcon {
+    overflow-x: auto;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+  }
+  
+  .ad_ul_listcon table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+  }
+  
+  .ad_ul_listcon th,
+  .ad_ul_listcon td {
+    padding: 0.8rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .ad_ul_listcon th {
+    background-color: #f2f2f2;
+    font-weight: 600;
+  }
+  
+  .ad_ul_listcon tr:hover {
+    background-color: #f9f9f9;
+    cursor: pointer;
+  }
+  
+  .ad_ul_empty {
+    text-align: center;
+    color: #999;
+    padding: 1rem;
+    font-style: italic;
+  }
+  

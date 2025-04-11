@@ -1,0 +1,16 @@
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2ecc71;
+    --font-size: 16px;
+    --padding: 10px;
+  }
+
+.ad_us_parent{
+
+}
+.ad_us_parent h1{
+    
+}
+.ad_us_listcon table{
+    width: 100%;
+}

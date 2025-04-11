@@ -1,18 +1,16 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthProvider';
 import ProtectedRoute from './routes/ProtectedRoute';
-import PublicRoute from './routes/PublicRoute'; // ✅ added
-import RedirectHome from './routes/RedirectHome'; // ✅ added
+import PublicRoute from './routes/PublicRoute';
+import RedirectHome from './routes/RedirectHome';
 import Login from './pages/auth/Login';
 import AdminRoutes from './routes/AdminRoutes';
-import EmployeeRoutes from './routes/EmployeeRoutes';
 
 const App = () => {
   return (
     <AuthProvider>
       <Router>
         <Routes>
-          {/* PublicRoute blocks logged-in users from accessing /login */}
           <Route
             path="/login"
             element={
@@ -22,10 +20,9 @@ const App = () => {
             }
           />
 
-          {/* Redirect from base route based on role */}
           <Route path="/" element={<RedirectHome />} />
 
-          {/* Admin Role Protected Routes */}
+          {/* ✅ Wrap AdminRoutes inside ProtectedRoute */}
           <Route
             path="/admin/*"
             element={
@@ -34,19 +31,6 @@ const App = () => {
               </ProtectedRoute>
             }
           />
-
-          {/* Employee Role Protected Routes */}
-          <Route
-            path="/employee/*"
-            element={
-              <ProtectedRoute roles={['employee']}>
-                <EmployeeRoutes />
-              </ProtectedRoute>
-            }
-          />
-
-          {/* Optional fallback */}
-          {/* <Route path="*" element={<p>Page Not Found</p>} /> */}
         </Routes>
       </Router>
     </AuthProvider>

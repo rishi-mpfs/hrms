@@ -1,0 +1,62 @@
+.ad_ud_container {
+    width: 100%;
+    margin: auto;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 12px;
+    border: 2px solid red;
+    box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  }
+  
+  .ad_ud_heading {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .ad_ud_actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .ad_ud_delete {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+  }
+  
+  .ad_ud_edit,
+  .ad_ud_save {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+  }
+  
+  .ad_ud_form {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 2rem;
+  }
+  
+  .ad_ud_label {
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+  }
+  
+  .ad_ud_input,
+  .ad_ud_select,
+  .ad_ud_textarea {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-top: 0.3rem;
+  }
+  
