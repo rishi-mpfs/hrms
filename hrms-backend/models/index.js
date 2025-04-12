@@ -11,8 +11,10 @@ const Payroll = require('./Payroll');
 Department.hasMany(User, { foreignKey: 'departmentId' });
 User.belongsTo(Department, { foreignKey: 'departmentId' });
 
-User.hasMany(Attendance);
-Attendance.belongsTo(User);
+
+User.hasMany(Attendance, { foreignKey: 'userId' });
+Attendance.belongsTo(User, { foreignKey: 'userId' });
+
 
 User.hasMany(Leave);
 Leave.belongsTo(User);

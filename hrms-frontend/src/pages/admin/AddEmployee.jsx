@@ -13,7 +13,8 @@ const AddEmployee = () => {
     address: '',
     joinDate: '',
     role: 'employee',
-    departmentId: ''
+    departmentId: '',
+    password: '' // ✅ Added password
   });
   const [departments, setDepartments] = useState([]);
   const navigate = useNavigate();
@@ -65,6 +66,17 @@ const AddEmployee = () => {
           Email:
           <input className="ad_ud_input" name="email" type="email" value={formData.email} onChange={handleChange} required />
         </label>
+        <label className="ad_ud_label">
+        Password:
+        <input
+          className="ad_ud_input"
+          name="password"
+          type="password"
+          value={formData.password}
+          onChange={handleChange}
+          required
+        />
+      </label>
         <label className="ad_ud_label">
           Phone:
           <input className="ad_ud_input" name="phone" value={formData.phone} onChange={handleChange} />

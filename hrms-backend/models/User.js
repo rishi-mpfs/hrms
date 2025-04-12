@@ -18,13 +18,13 @@ const User = sequelize.define('User', {
   role: { type: DataTypes.ENUM('admin', 'hr', 'employee'), defaultValue: 'employee' },
 
   // ✅ Define departmentId as a foreign key
-  departmentId: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: 'Departments',
-      key: 'id'
-    }
-  }
+  // departmentId: {
+  //   type: DataTypes.INTEGER,
+  //   references: {
+  //     model: 'Departments',
+  //     key: 'id'
+  //   }
+  // }
 });
 
 module.exports = User;

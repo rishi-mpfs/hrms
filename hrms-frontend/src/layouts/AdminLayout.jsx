@@ -9,6 +9,7 @@ const AdminLayout = () => {
         <nav className="nav-links">
           <Link to="/admin">Dashboard</Link>
           <Link to="/admin/employees">Employees</Link>
+          <Link to="/admin/attendance">Attendance</Link>
           <Link to="/admin/payroll">Payroll</Link>
         </nav>
       </aside> 

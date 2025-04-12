@@ -1,4 +1,5 @@
 const { User, Department } = require('../models');
+const bcrypt = require('bcryptjs');
 
 // 1. Get all users
 exports.getAllUsers = async (req, res) => {
@@ -30,6 +31,8 @@ exports.getUserById = async (req, res) => {
 // 3. Create a user (admin use)
 
 
+
+
 exports.createUser = async (req, res) => {
   const {
     name,
@@ -45,10 +48,12 @@ exports.createUser = async (req, res) => {
   } = req.body;
 
   try {
+    const hashedPassword = await bcrypt.hash(password, 10); // hash the password
+
     const newUser = await User.create({
       name,
       email,
-      password,
+      password: hashedPassword,
       role,
       departmentId,
       phone,
@@ -64,6 +69,7 @@ exports.createUser = async (req, res) => {
     res.status(500).json({ error: 'Failed to create user' });
   }
 };
+
 
 // 4. Update user
 exports.updateUser = async (req, res) => {

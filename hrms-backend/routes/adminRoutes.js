@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
 const departmentController = require('../controllers/departmentController');
-
+const attendanceController = require('../controllers/attendanceController')
 const { verifyToken, requireRole } = require('../middleware/auth');
 
 router.use(verifyToken, requireRole(['admin']));
@@ -18,5 +18,11 @@ router.get('/department', departmentController.getAllDepartments);
 router.get('/department/:id', departmentController.getDepartmentById);
 router.put('/department/:id', departmentController.updateDepartment);
 router.delete('/department/:id', departmentController.deleteDepartment);
+
+router.get('/attendance/:month',attendanceController.getAllUsersAttendanceSummary);
+router.get('/attendence/:userId/month',attendanceController.getUserMonthlyAttendance);
+router.put('/attendance/:id',attendanceController.updateAttendance);
+router.get('/attendance/user/:userId',attendanceController.getMyMonthlyAttendance);
+
 
 module.exports = router;
