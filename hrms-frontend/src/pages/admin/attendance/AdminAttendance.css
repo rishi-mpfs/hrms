@@ -1,0 +1,97 @@
+.ad_aud_calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+    padding: 20px;
+  }
+  
+  .ad_aud_day {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    min-height: 100px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+  }
+  
+  .ad_aud_day:hover {
+    background-color: #e0f7fa;
+  }
+  
+  .ad_aud_date {
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+  
+  .ad_aud_status {
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-size: 12px;
+    color: #fff;
+    display: inline-block;
+  }
+  
+  .ad_aud_present { background-color: #4caf50; }
+  .ad_aud_absent { background-color: #f44336; }
+  .ad_aud_late { background-color: #ff9800; }
+  
+  /* Modal */
+  .ad_aud_modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .ad_aud_modal_content {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 30px;
+    width: 400px;
+    animation: fadeIn 0.3s ease-in-out;
+    position: relative;
+  }
+  
+  .ad_aud_modal_content h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+  }
+  
+  .ad_aud_modal_content input,
+  .ad_aud_modal_content select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+  
+  .ad_aud_btn {
+    padding: 10px 20px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 8px;
+    background-color: #1976d2;
+    color: #fff;
+    cursor: pointer;
+  }
+  
+  .ad_aud_btn_cancel {
+    background-color: #aaa;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './../AdminEmployee.css';
 
 const AdminAttendanceSummary = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const getCurrentMonth = () => {
     const now = new Date();
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`; // format: YYYY-MM
@@ -35,7 +35,8 @@ const AdminAttendanceSummary = () => {
 
   const handleRowClick = (userId) => {
     // Navigate to the detailed attendance page
-    history.push(`/attendance-detail/${userId}/${month}`);
+  
+navigate(`/admin/attendance-detail/${userId}/${month}`);
   };
 
   return (

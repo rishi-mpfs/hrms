@@ -2,7 +2,7 @@ require('dotenv').config();
 const {sequelize, Attendance } = require('./models');
 const { Op } = require('sequelize');
 
-const userId = 3; // change to the desired user ID
+const userId = 2; // change to the desired user ID
 const month = '2025-04'; // format YYYY-MM
 
 const getDatesOfMonth = (year, month) => {
