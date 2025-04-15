@@ -94,6 +94,31 @@ exports.updateAttendance = async (req, res) => {
 };
 
 // ===================== USER CONTROLLERS ===================== //
+// controllers/userAttendanceController.js
+
+exports.getTodayAttendanceStatus = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const today = moment().format('YYYY-MM-DD');
+
+    const attendance = await Attendance.findOne({
+      where: { userId, date: today }
+    });
+
+    if (!attendance) {
+      return res.json({ checkedIn: false, checkedOut: false });
+    }
+
+    res.json({
+      checkedIn: true,
+      checkedOut: !!attendance.checkOut,
+      checkInTime: attendance.checkIn,
+      checkOutTime: attendance.checkOut
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch attendance status', details: error.message });
+  }
+};
 
 // User Check-in
 exports.checkIn = async (req, res) => {

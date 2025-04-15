@@ -5,6 +5,7 @@ import PublicRoute from './routes/PublicRoute';
 import RedirectHome from './routes/RedirectHome';
 import Login from './pages/auth/Login';
 import AdminRoutes from './routes/AdminRoutes';
+import EmployeeRoutes from './routes/EmployeeRoutes';
 
 const App = () => {
   return (
@@ -28,6 +29,14 @@ const App = () => {
             element={
               <ProtectedRoute roles={['admin', 'hr']}>
                 <AdminRoutes />
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/employee/*"
+            element={
+              <ProtectedRoute roles={['employee']}>
+                <EmployeeRoutes />
               </ProtectedRoute>
             }
           />

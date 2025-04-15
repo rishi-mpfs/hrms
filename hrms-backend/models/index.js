@@ -15,12 +15,15 @@ User.belongsTo(Department, { foreignKey: 'departmentId' });
 User.hasMany(Attendance, { foreignKey: 'userId' });
 Attendance.belongsTo(User, { foreignKey: 'userId' });
 
+User.hasMany(Leave, { foreignKey: 'userId' });
+Leave.belongsTo(User, { foreignKey: 'userId' });
+// User.hasMany(Leave);
+// Leave.belongsTo(User);
 
-User.hasMany(Leave);
-Leave.belongsTo(User);
-
-User.hasMany(Payroll);
-Payroll.belongsTo(User);
+User.hasMany(Payroll, { foreignKey: 'userId' });
+Payroll.belongsTo(User, { foreignKey: 'userId' });
+// User.hasMany(Payroll);
+// Payroll.belongsTo(User);
 
 module.exports = {
   sequelize,

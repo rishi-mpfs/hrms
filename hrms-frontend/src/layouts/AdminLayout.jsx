@@ -10,7 +10,9 @@ const AdminLayout = () => {
           <Link to="/admin">Dashboard</Link>
           <Link to="/admin/employees">Employees</Link>
           <Link to="/admin/attendance">Attendance</Link>
+          <Link to="/admin/leave">Leave</Link>
           <Link to="/admin/payroll">Payroll</Link>
+          <Link to="/admin/department">Department</Link>
         </nav>
       </aside> 
       <main className="main-content">

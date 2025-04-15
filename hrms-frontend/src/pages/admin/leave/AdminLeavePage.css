@@ -1,0 +1,43 @@
+.us_lv_container {
+    padding: 20px;
+  }
+  
+  .us_lv_heading {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .us_lv_filter {
+    margin-bottom: 15px;
+  }
+  
+  .us_lv_filter_label {
+    margin-right: 10px;
+    font-weight: bold;
+  }
+  
+  .us_lv_filter_select {
+    padding: 6px 10px;
+  }
+  
+  .us_lv_table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  .us_lv_table th,
+  .us_lv_table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .us_lv_table th {
+    background-color: #f2f2f2;
+  }
+  
+  .us_lv_status_select {
+    padding: 5px;
+  }
+  

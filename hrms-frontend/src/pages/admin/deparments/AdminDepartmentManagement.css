@@ -1,0 +1,67 @@
+.ad_dm_container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+  }
+  
+  .ad_dm_heading {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .ad_dm_form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+    justify-content: center;
+  }
+  
+  .ad_dm_input {
+    padding: 8px;
+    flex: 1;
+    min-width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+  
+  .ad_dm_button {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  .ad_dm_button:hover {
+    background-color: #0056b3;
+  }
+  
+  .ad_dm_table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  .ad_dm_table th,
+  .ad_dm_table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .ad_dm_action_buttons {
+    display: flex;
+    gap: 5px;
+  }
+  
+  .ad_dm_edit_input {
+    padding: 6px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  

@@ -1,0 +1,137 @@
+.us_ad_container {
+    padding: 20px;
+  }
+  
+  .us_ad_heading {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .us_ad_calendar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .us_ad_day {
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 10px;
+    width: 100px;
+    text-align: center;
+  }
+  
+  .us_ad_date {
+    font-weight: bold;
+  }
+  
+  .us_ad_status {
+    margin-top: 5px;
+    padding: 4px 6px;
+    border-radius: 4px;
+    font-size: 14px;
+    text-transform: capitalize;
+  }
+  
+  .us_ad_present {
+    background-color: #d4edda;
+    color: #155724;
+  }
+  
+  .us_ad_late {
+    background-color: #fff3cd;
+    color: #856404;
+  }
+  
+  .us_ad_absent {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+  
+  .us_ad_norecord {
+    background-color: #e2e3e5;
+    color: #6c757d;
+  }
+  
+
+
+  /* ========== user leave============= */
+
+  /* us_leave_page */
+.us_leave_page {
+    padding: 20px;
+  }
+  
+  .us_leave_heading {
+    font-size: 2em;
+    margin-bottom: 20px;
+  }
+  
+  .us_leave_filters {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+  }
+  
+  .us_leave_btn {
+    padding: 10px 15px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .us_leave_sort_btn {
+    padding: 10px 15px;
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .us_leave_list {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+  }
+  
+  .us_leave_item {
+    padding: 10px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+  }
+  
+  .us_leave_item .us_leave_date {
+    font-weight: bold;
+  }
+  
+  .us_leave_item .us_leave_status {
+    font-style: italic;
+  }
+  
+  .us_leave_item .us_leave_reason {
+    margin-top: 10px;
+  }
+  
+  /* us_leave_form */
+  .us_leave_form {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 30px;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 400px;
+  }
+  
+  .us_leave_form_group {
+    margin-bottom: 15px;
+  }
+  
+  .us_leave_form_buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+  

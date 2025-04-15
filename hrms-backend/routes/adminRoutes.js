@@ -3,6 +3,10 @@ const router = express.Router();
 const userController = require('../controllers/userController');
 const departmentController = require('../controllers/departmentController');
 const attendanceController = require('../controllers/attendanceController')
+const leaveController = require('../controllers/leaveController')
+const payrollController = require('../controllers/payrollController')
+
+
 const { verifyToken, requireRole } = require('../middleware/auth');
 
 router.use(verifyToken, requireRole(['admin']));
@@ -22,7 +26,14 @@ router.delete('/department/:id', departmentController.deleteDepartment);
 router.get('/attendance/:month',attendanceController.getAllUsersAttendanceSummary);
 router.get('/attendence/:userId/month',attendanceController.getUserMonthlyAttendance);
 router.put('/attendance/:id',attendanceController.updateAttendance);
-router.get('/attendance/user/:userId',attendanceController.getMyMonthlyAttendance);
+// router.get('/attendance/user/:userId',attendanceController.getMyMonthlyAttendance);
 
+router.get('/leaves',leaveController.getAllLeaves);
+router.put('/leave/:id',leaveController.updateLeaveStatus);
 
+router.get('/payroll/initiate', payrollController.initiatePayrollView);
+router.post('/payroll/bulkgenerate',payrollController.generateBulkPayroll);
+router.post('/payroll/generate',payrollController.generatePayroll);
+router.put('/payroll/status/:id',payrollController.updatePayrollStatus);
+router.get('/payslip/:id',payrollController.downloadPayslip);
 module.exports = router;

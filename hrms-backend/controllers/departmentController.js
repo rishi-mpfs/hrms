@@ -1,4 +1,4 @@
-const { Department } = require('../models');
+const { Department, sequelize } = require('../models');
 
 // 1. Create a department
 exports.createDepartment = async (req, res) => {
@@ -12,14 +12,26 @@ exports.createDepartment = async (req, res) => {
 };
 
 // 2. Get all departments
+
 exports.getAllDepartments = async (req, res) => {
   try {
-    const departments = await Department.findAll();
+    const departments = await sequelize.query(
+      `
+      SELECT d.*, COUNT(u.id) AS employeeCount
+      FROM Departments d
+      LEFT JOIN Users u ON d.id = u.departmentId
+      GROUP BY d.id
+      `,
+      { type: sequelize.QueryTypes.SELECT }
+    );
+
     res.json(departments);
   } catch (err) {
-    res.status(500).json({ error: 'Failed to fetch departments' });
+    console.error(err);
+    res.status(500).json({ error: 'Failed to fetch departments with employee count' });
   }
 };
+
 
 // 3. Get department by ID
 exports.getDepartmentById = async (req, res) => {

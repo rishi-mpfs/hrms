@@ -3,10 +3,12 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
 import './AdminAttendance.css';
+
 const AdminUserAttendanceDetail = () => {
   const { userId, month } = useParams();
   const [attendanceDetails, setAttendanceDetails] = useState([]);
   const [selectedDay, setSelectedDay] = useState(null);
+  const [attendanceId, setAttendanceId] = useState(null);
   const [editData, setEditData] = useState({ checkIn: '', checkOut: '', status: '' });
 
   useEffect(() => {
@@ -34,6 +36,7 @@ const AdminUserAttendanceDetail = () => {
   const handleDayClick = (date) => {
     const entry = getStatusForDate(date);
     setSelectedDay(date);
+    setAttendanceId(entry?.id || null);
     setEditData({
       checkIn: entry?.checkIn || '',
       checkOut: entry?.checkOut || '',
@@ -42,27 +45,31 @@ const AdminUserAttendanceDetail = () => {
   };
 
   const handleEditSubmit = async () => {
+    if (!attendanceId) {
+      console.error("No attendance record ID found for update.");
+      return;
+    }
+
     try {
-      await axios.put(
-        `http://localhost:5000/api/admin/attendance/${userId}`,
+      const updateRes = await axios.put(
+        `http://localhost:5000/api/admin/attendance/${attendanceId}`,
         {
           date: selectedDay,
           ...editData,
         },
         { withCredentials: true }
       );
-      console.log(res.data);
-      // Refresh data after update
+      console.log('Update success:', updateRes.data);
+
       const res = await axios.get(
         `http://localhost:5000/api/admin/attendence/${userId}/month?month=${month}`,
         { withCredentials: true }
       );
-      console.log(res.data);
-      
       setAttendanceDetails(res.data);
       setSelectedDay(null);
+      setAttendanceId(null);
     } catch (error) {
-      console.error('Failed to update attendance:', error);
+      console.error('Failed to update attendance:', error.response?.data || error.message);
     }
   };
 
@@ -71,22 +78,29 @@ const AdminUserAttendanceDetail = () => {
       <h1 className="ad_aud_title">Attendance for User {userId} - {month}</h1>
       <div className="ad_aud_calendar">
         {Array.from({ length: daysInMonth }, (_, i) => {
-          const dateStr = `${month}-${String(i + 1).padStart(2, '0')}`;
+          const day = i + 1;
+          const dateStr = `${month}-${String(day).padStart(2, '0')}`;
+          const today = new Date();
+          const [year, mon] = month.split('-').map(Number);
+          const dateObj = new Date(year, mon - 1, day);
+          const isFuture = dateObj > today;
+
+          if (isFuture) return null;
+
           const statusEntry = getStatusForDate(dateStr);
-          const status = statusEntry?.status || 'Absent';
-          const statusClass = status === 'Present'
-            ? 'ad_aud_present'
-            : status === 'Late'
-            ? 'ad_aud_late'
-            : 'ad_aud_absent';
+          const status = statusEntry?.status || 'No Record';
+          const statusClass =
+            status === 'present'
+              ? 'ad_aud_present'
+              : status === 'late'
+              ? 'ad_aud_late'
+              : status === 'absent'
+              ? 'ad_aud_absent'
+              : 'ad_aud_norecord';
 
           return (
-            <div
-              key={dateStr}
-              className="ad_aud_day"
-              onClick={() => handleDayClick(dateStr)}
-            >
-              <div className="ad_aud_date">{i + 1}</div>
+            <div key={dateStr} className="ad_aud_day" onClick={() => handleDayClick(dateStr)}>
+              <div className="ad_aud_date">{day}</div>
               <div className={`ad_aud_status ${statusClass}`}>{status}</div>
             </div>
           );
@@ -121,7 +135,10 @@ const AdminUserAttendanceDetail = () => {
               <button className="ad_aud_btn" onClick={handleEditSubmit}>Save</button>
               <button
                 className="ad_aud_btn ad_aud_btn_cancel"
-                onClick={() => setSelectedDay(null)}
+                onClick={() => {
+                  setSelectedDay(null);
+                  setAttendanceId(null);
+                }}
               >
                 Cancel
               </button>
