@@ -17,12 +17,8 @@ const AdminEmployeedetails = () => {
     const fetchUserAndDepartments = async () => {
       try {
         const [userRes, deptRes] = await Promise.all([
-          axios.get(`http://localhost:5000/api/admin/user/${id}`, {
-            withCredentials: true
-          }),
-          axios.get('http://localhost:5000/api/admin/department', {
-            withCredentials: true
-          })
+          axios.get(`http://localhost:5000/api/admin/user/${id}`, { withCredentials: true }),
+          axios.get('http://localhost:5000/api/admin/department', { withCredentials: true })
         ]);
         setUser(userRes.data);
         setDepartments(deptRes.data);
@@ -60,7 +56,7 @@ const AdminEmployeedetails = () => {
           withCredentials: true
         });
         alert('User deleted successfully');
-        navigate(-1); // Go back
+        navigate(-1);
       } catch (err) {
         console.error('Error deleting user:', err);
       }
@@ -71,80 +67,95 @@ const AdminEmployeedetails = () => {
 
   return (
     <div className="ad_ud_container">
-    <h2 className="ad_ud_heading">User Detail</h2>
-  
-    <div className="ad_ud_actions">
-    <button className="ad_ud_edit" onClick={() => navigate(-1)}>Back</button>
-      <button className="ad_ud_delete" onClick={handleDelete}>Delete User</button>
-      {!isEditing ? (
-        <button className="ad_ud_edit" onClick={handleEditToggle}>Edit</button>
-        
-      ) : (
-        <button className="ad_ud_save" onClick={handleSave}>Save</button>
-      )}
+      <h2 className="ad_ud_heading">User Detail</h2>
+
+      <div className="ad_ud_actions">
+        <button className="ad_ud_edit" onClick={() => navigate(-1)}>Back</button>
+        <button className="ad_ud_delete" onClick={handleDelete}>Delete User</button>
+        {!isEditing ? (
+          <button className="ad_ud_edit" onClick={handleEditToggle}>Edit</button>
+        ) : (
+          <button className="ad_ud_save" onClick={handleSave}>Save</button>
+        )}
+      </div>
+
+      <form className="ad_ud_form">
+        <label className="ad_ud_label">Name:
+          <input className="ad_ud_input" name="name" value={formData.name} onChange={handleInputChange} disabled={!isEditing} />
+        </label>
+
+        <label className="ad_ud_label">Email:
+          <input className="ad_ud_input" name="email" value={formData.email} disabled />
+        </label>
+
+        <label className="ad_ud_label">Phone:
+          <input className="ad_ud_input" name="phone" value={formData.phone || ''} onChange={handleInputChange} disabled={!isEditing} />
+        </label>
+
+        <label className="ad_ud_label">Gender:
+          <select className="ad_ud_select" name="gender" value={formData.gender || ''} onChange={handleInputChange} disabled={!isEditing}>
+            <option value="">Select</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
+        </label>
+
+        <label className="ad_ud_label">DOB:
+          <input className="ad_ud_input" type="date" name="dob" value={formData.dob?.slice(0, 10) || ''} onChange={handleInputChange} disabled={!isEditing} />
+        </label>
+
+        <label className="ad_ud_label">Address:
+          <textarea className="ad_ud_textarea" name="address" value={formData.address || ''} onChange={handleInputChange} disabled={!isEditing} />
+        </label>
+
+        <label className="ad_ud_label">Join Date:
+          <input className="ad_ud_input" type="date" name="joinDate" value={formData.joinDate?.slice(0, 10) || ''} onChange={handleInputChange} disabled={!isEditing} />
+        </label>
+
+        <label className="ad_ud_label">Role:
+          <select className="ad_ud_select" name="role" value={formData.role || 'employee'} onChange={handleInputChange} disabled={!isEditing}>
+            <option value="employee">Employee</option>
+            <option value="hr">HR</option>
+            <option value="admin">Admin</option>
+          </select>
+        </label>
+
+        <label className="ad_ud_label">Department:
+          <select className="ad_ud_select" name="departmentId" value={formData.departmentId || ''} onChange={handleInputChange} disabled={!isEditing}>
+            <option value="">Select</option>
+            {departments.map((dept) => (
+              <option key={dept.id} value={dept.id}>{dept.name}</option>
+            ))}
+          </select>
+        </label>
+
+        {/* Newly added fields */}
+        <label className="ad_ud_label">Designation:
+          <input className="ad_ud_input" name="designation" value={formData.designation || ''} onChange={handleInputChange} disabled={!isEditing} />
+        </label>
+
+        <label className="ad_ud_label">Salary:
+          <input className="ad_ud_input" type="number" name="salary" value={formData.salary || ''} onChange={handleInputChange} disabled={!isEditing} />
+        </label>
+
+        <label className="ad_ud_label">Account Number:
+          <input className="ad_ud_input" name="accountNumber" value={formData.accountNumber || ''} onChange={handleInputChange} disabled={!isEditing} />
+        </label>
+
+        <label className="ad_ud_label">Status:
+          <select className="ad_ud_select" name="status" value={formData.status || ''} onChange={handleInputChange} disabled={!isEditing}>
+            <option value="">Select</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </label>
+
+        <label className="ad_ud_label">Profile Image URL:
+          <input className="ad_ud_input" name="profileImage" value={formData.profileImage || ''} onChange={handleInputChange} disabled={!isEditing} />
+        </label>
+      </form>
     </div>
-  
-    <form className="ad_ud_form">
-      <label className="ad_ud_label">Name:
-        <input className="ad_ud_input" name="name" value={formData.name} onChange={handleInputChange} disabled={!isEditing} />
-      </label>
-  
-      <label className="ad_ud_label">Email:
-        <input className="ad_ud_input" name="email" value={formData.email} disabled />
-      </label>
-  
-      <label className="ad_ud_label">Phone:
-        <input className="ad_ud_input" name="phone" value={formData.phone || ''} onChange={handleInputChange} disabled={!isEditing} />
-      </label>
-  
-      <label className="ad_ud_label">Gender:
-        <select className="ad_ud_select" name="gender" value={formData.gender || ''} onChange={handleInputChange} disabled={!isEditing}>
-          <option value="">Select</option>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-          <option value="other">Other</option>
-        </select>
-      </label>
-  
-      <label className="ad_ud_label">DOB:
-        <input className="ad_ud_input" type="date" name="dob" value={formData.dob?.slice(0, 10) || ''} onChange={handleInputChange} disabled={!isEditing} />
-      </label>
-  
-      <label className="ad_ud_label">Address:
-        <textarea className="ad_ud_textarea" name="address" value={formData.address || ''} onChange={handleInputChange} disabled={!isEditing} />
-      </label>
-  
-      <label className="ad_ud_label">Join Date:
-        <input className="ad_ud_input" type="date" name="joinDate" value={formData.joinDate?.slice(0, 10) || ''} onChange={handleInputChange} disabled={!isEditing} />
-      </label>
-  
-      <label className="ad_ud_label">Role:
-        <select className="ad_ud_select" name="role" value={formData.role || 'employee'} onChange={handleInputChange} disabled={!isEditing}>
-          <option value="employee">Employee</option>
-          <option value="hr">HR</option>
-          <option value="admin">Admin</option>
-        </select>
-      </label>
-  
-      <label className="ad_ud_label">Department:
-        <select
-          className="ad_ud_select"
-          name="departmentId"
-          value={formData.departmentId || ''}
-          onChange={handleInputChange}
-          disabled={!isEditing}
-        >
-          <option value="">Select</option>
-          {departments.map((dept) => (
-            <option key={dept.id} value={dept.id}>
-              {dept.name}
-            </option>
-          ))}
-        </select>
-      </label>
-    </form>
-  </div>
-  
   );
 };
 

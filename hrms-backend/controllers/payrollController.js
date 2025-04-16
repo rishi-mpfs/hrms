@@ -283,6 +283,8 @@ exports.generatePayroll = async (req, res) => {
       const netPay = payroll.netSalary;
   
       const payslip = {
+        
+        payrollId: payroll.id,
         employeeName: name,
         email,
         phone,

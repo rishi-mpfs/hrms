@@ -1,5 +1,5 @@
 require('dotenv').config();
-const {sequelize, Attendance } = require('./models');
+const { sequelize, Attendance } = require('./models');
 const { Op } = require('sequelize');
 
 const userId = 2; // change to the desired user ID
@@ -8,12 +8,19 @@ const month = '2025-04'; // format YYYY-MM
 const getDatesOfMonth = (year, month) => {
   const dates = [];
   const date = new Date(year, month - 1, 1);
+  const today = new Date();
+
   while (date.getMonth() === month - 1) {
-    if (date.getDay() !== 0 && date.getDay() !== 6) { // Skip weekends
+    const isWeekend = date.getDay() === 0 || date.getDay() === 6;
+    const isFuture = date > today;
+
+    if (!isWeekend && !isFuture) {
       dates.push(new Date(date));
     }
+
     date.setDate(date.getDate() + 1);
   }
+
   return dates;
 };
 
@@ -39,7 +46,7 @@ const run = async () => {
     }));
 
     await Attendance.bulkCreate(records);
-    console.log(`Seeded ${records.length} attendance records for user ${userId} in ${month}.`);
+    console.log(`Seeded ${records.length} attendance records for user ${userId} in ${month} (till today only).`);
     process.exit(0);
   } catch (err) {
     console.error('Seeding failed:', err);

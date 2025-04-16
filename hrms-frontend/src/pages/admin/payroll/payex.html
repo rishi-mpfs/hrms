@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Payslip</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      padding: 20px;
+    }
+    .ad_ps_container {
+      border: 1px solid #000;
+      padding: 10px;
+      width: 100%;
+    }
+    .ad_ps_header {
+      text-align: center;
+      border-bottom: 1px solid #000;
+      padding-bottom: 10px;
+    }
+    .ad_ps_logo {
+      height: 40px;
+    }
+    .ad_ps_title {
+      font-weight: bold;
+      margin-top: 5px;
+      font-size: 16px;
+    }
+    .ad_ps_section {
+      margin-top: 10px;
+    }
+    .ad_ps_table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .ad_ps_table td,
+    .ad_ps_table th {
+      border: 1px solid #000;
+      padding: 5px;
+      text-align: left;
+    }
+    .ad_ps_note {
+      margin-top: 10px;
+      font-weight: bold;
+      font-size: 12px;
+    }
+    .ad_ps_center {
+      text-align: center;
+    }
+    .ad_ps_bold {
+      font-weight: bold;
+    }
+    .ad_ps_right {
+      text-align: right;
+    }
+    .ad_ps_gray {
+      background-color: #eee;
+    }
+  </style>
+</head>
+<body>
+  <div class="ad_ps_container">
+    <div class="ad_ps_header">
+      <img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/4b/HDFC_Life_logo.svg/1200px-HDFC_Life_logo.svg.png" class="ad_ps_logo" />
+      <div class="ad_ps_title">HDFC Life Insurance Company Limited</div>
+      <div>13th Floor, Lodha Excelus, Apollo Mills Compound, Mumbai - 400011</div>
+      <div>Pay Slip for the Month of <strong>March 2025</strong></div>
+    </div>
+
+    <div class="ad_ps_section">
+      <table class="ad_ps_table">
+        <tr>
+          <td>Code</td><td>: 12345</td>
+          <td>Bank/MICR</td><td>: XXXX9999</td>
+        </tr>
+        <tr>
+          <td>Department</td><td>: IT</td>
+          <td>Bank A/c No.</td><td>: XXXXXX5678</td>
+        </tr>
+        <tr>
+          <td>Grade</td><td>: A1</td>
+          <td>Cost Center</td><td>: 001</td>
+        </tr>
+        <tr>
+          <td>DOB</td><td>: 01-Jan-1990</td>
+          <td>PAN</td><td>: AAAAA0000A</td>
+        </tr>
+        <tr>
+          <td>DOJ</td><td>: 01-Jan-2020</td>
+          <td>PF UAN</td><td>: 100000000000</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="ad_ps_section">
+      <table class="ad_ps_table">
+        <thead class="ad_ps_gray">
+          <tr>
+            <th>Earnings</th><th>Rate</th><th>Monthly</th><th>Arrear</th><th>Total</th>
+            <th>Deductions</th><th>Amount</th>
+          </tr>
+        </thead>
+        <tr>
+          <td>Basic</td><td>11160</td><td>0</td><td>0</td><td>0</td><td>Income Tax</td><td>171233.00</td>
+        </tr>
+        <tr>
+          <td>HRA</td><td>5600</td><td>0</td><td>0</td><td>0</td><td></td><td></td>
+        </tr>
+        <tr>
+          <td>Statutory Bonus</td><td>22300</td><td>0</td><td>0</td><td>0</td><td></td><td></td>
+        </tr>
+        <tr class="ad_ps_gray ad_ps_bold">
+          <td colspan="5">Gross Earning: ₹ 50218.00</td>
+          <td>Gross Deduction</td><td>₹ 171233.00</td>
+        </tr>
+        <tr class="ad_ps_bold">
+          <td colspan="7" class="ad_ps_center">Net Pay : ₹ 378985.00 (THREE LAKHS SEVENTY EIGHT THOUSAND NINE HUNDRED EIGHTY FIVE ONLY)</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="ad_ps_section">
+      <div class="ad_ps_bold">Income Tax Worksheet for the Period April 2024 - March 2025</div>
+      <table class="ad_ps_table">
+        <tr>
+          <th>Description</th><th>Gross</th><th>Exempt</th><th>Taxable</th><th>Deduction u/s VI-A</th><th>Taxable HRA</th>
+        </tr>
+        <tr>
+          <td>Incentive</td><td>3456576</td><td>0</td><td>3456576</td><td>0</td><td>0</td>
+        </tr>
+      </table>
+
+      <table class="ad_ps_table">
+        <tr><td>Standard Deduction</td><td>75000.00</td></tr>
+        <tr><td>Health and Education Cess</td><td>28179.00</td></tr>
+        <tr><td>Tax Deduction This Month</td><td>171233.00</td></tr>
+        <tr><td>Total Tax Till Date</td><td>732652.00</td></tr>
+      </table>
+    </div>
+
+    <div class="ad_ps_note">
+      Personal Note: This is a system generated payslip, does not require any signature.
+    </div>
+  </div>
+</body>
+</html>

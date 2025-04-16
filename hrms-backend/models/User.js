@@ -16,8 +16,10 @@ const User = sequelize.define('User', {
   profileImage: { type: DataTypes.STRING },
   status: { type: DataTypes.ENUM('active', 'inactive'), defaultValue: 'active' },
   role: { type: DataTypes.ENUM('admin', 'hr', 'employee'), defaultValue: 'employee' },
+  salary: { type: DataTypes.FLOAT },
+  accountNumber: { type: DataTypes.STRING },
 
-  // ✅ Define departmentId as a foreign key
+  //  Define departmentId as a foreign key
   // departmentId: {
   //   type: DataTypes.INTEGER,
   //   references: {

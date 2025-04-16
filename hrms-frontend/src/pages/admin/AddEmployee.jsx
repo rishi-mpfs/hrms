@@ -7,15 +7,21 @@ const AddEmployee = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    password: '',
     phone: '',
     dob: '',
     gender: '',
     address: '',
+    designation: '',
     joinDate: '',
+    salary: '',
+    profileImage: '',
+    status: 'active',
     role: 'employee',
-    departmentId: '',
-    password: '' // ✅ Added password
+    accountNumber: '',
+    departmentId: ''
   });
+
   const [departments, setDepartments] = useState([]);
   const navigate = useNavigate();
 
@@ -48,6 +54,7 @@ const AddEmployee = () => {
       navigate('/admin/employees');
     } catch (err) {
       console.error('Error creating user:', err);
+      alert('Failed to create user');
     }
   };
 
@@ -55,34 +62,26 @@ const AddEmployee = () => {
     <div className="ad_ud_container">
       <h2 className="ad_ud_heading">Create New User</h2>
       <div className="ad_ud_actions">
-      <button className="ad_ud_edit" onClick={() => navigate(-1)}>Back</button>
+        <button className="ad_ud_edit" onClick={() => navigate(-1)}>Back</button>
       </div>
       <form className="ad_ud_form" onSubmit={handleSubmit}>
-        <label className="ad_ud_label">
-          Name:
+        <label className="ad_ud_label">Name:
           <input className="ad_ud_input" name="name" value={formData.name} onChange={handleChange} required />
         </label>
-        <label className="ad_ud_label">
-          Email:
+
+        <label className="ad_ud_label">Email:
           <input className="ad_ud_input" name="email" type="email" value={formData.email} onChange={handleChange} required />
         </label>
-        <label className="ad_ud_label">
-        Password:
-        <input
-          className="ad_ud_input"
-          name="password"
-          type="password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
-      </label>
-        <label className="ad_ud_label">
-          Phone:
+
+        <label className="ad_ud_label">Password:
+          <input className="ad_ud_input" name="password" type="password" value={formData.password} onChange={handleChange} required />
+        </label>
+
+        <label className="ad_ud_label">Phone:
           <input className="ad_ud_input" name="phone" value={formData.phone} onChange={handleChange} />
         </label>
-        <label className="ad_ud_label">
-          Gender:
+
+        <label className="ad_ud_label">Gender:
           <select className="ad_ud_select" name="gender" value={formData.gender} onChange={handleChange}>
             <option value="">Select</option>
             <option value="male">Male</option>
@@ -90,28 +89,51 @@ const AddEmployee = () => {
             <option value="other">Other</option>
           </select>
         </label>
-        <label className="ad_ud_label">
-          DOB:
+
+        <label className="ad_ud_label">DOB:
           <input className="ad_ud_input" type="date" name="dob" value={formData.dob} onChange={handleChange} />
         </label>
-        <label className="ad_ud_label">
-          Address:
+
+        <label className="ad_ud_label">Address:
           <textarea className="ad_ud_textarea" name="address" value={formData.address} onChange={handleChange} />
         </label>
-        <label className="ad_ud_label">
-          Join Date:
+
+        <label className="ad_ud_label">Designation:
+          <input className="ad_ud_input" name="designation" value={formData.designation} onChange={handleChange} />
+        </label>
+
+        <label className="ad_ud_label">Join Date:
           <input className="ad_ud_input" type="date" name="joinDate" value={formData.joinDate} onChange={handleChange} />
         </label>
-        <label className="ad_ud_label">
-          Role:
+
+        <label className="ad_ud_label">Salary:
+          <input className="ad_ud_input" type="number" name="salary" value={formData.salary} onChange={handleChange} />
+        </label>
+
+        <label className="ad_ud_label">Profile Image (URL):
+          <input className="ad_ud_input" name="profileImage" value={formData.profileImage} onChange={handleChange} />
+        </label>
+
+        <label className="ad_ud_label">Status:
+          <select className="ad_ud_select" name="status" value={formData.status} onChange={handleChange}>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </label>
+
+        <label className="ad_ud_label">Role:
           <select className="ad_ud_select" name="role" value={formData.role} onChange={handleChange}>
             <option value="employee">Employee</option>
             <option value="hr">HR</option>
             <option value="admin">Admin</option>
           </select>
         </label>
-        <label className="ad_ud_label">
-          Department:
+
+        <label className="ad_ud_label">Account Number:
+          <input className="ad_ud_input" name="accountNumber" value={formData.accountNumber} onChange={handleChange} />
+        </label>
+
+        <label className="ad_ud_label">Department:
           <select className="ad_ud_select" name="departmentId" value={formData.departmentId} onChange={handleChange} required>
             <option value="">Select Department</option>
             {departments.map((dept) => (
@@ -119,8 +141,8 @@ const AddEmployee = () => {
             ))}
           </select>
         </label>
+
         <div className="ad_ud_actions">
-        
           <button type="submit" className="ad_ud_save">Create</button>
         </div>
       </form>

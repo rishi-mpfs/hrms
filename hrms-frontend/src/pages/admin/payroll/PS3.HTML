@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fixed Header/Footer Table</title>
+  <style>
+    .ad_ps_container {
+      width: 100%;
+      border: 1px solid #000;
+      font-family: sans-serif;
+      font-size: 14px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .ad_ps_table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .ad_ps_table th,
+    .ad_ps_table td {
+      border: 1px solid #000;
+      padding: 6px;
+      text-align: left;
+    }
+
+    .ad_ps_tbody_wrapper {
+      min-height: 200px; /* set your minimum height */
+    }
+
+    .ad_ps_table tfoot td {
+      font-weight: bold;
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+
+<div class="ad_ps_container">
+
+  <table class="ad_ps_table">
+    <thead>
+      <tr>
+        <th>Description</th>
+        <th>Gross</th>
+        <th>Exempt</th>
+        <th>Taxable</th>
+        <th>Deductions</th>
+      </tr>
+    </thead>
+  </table>
+
+  <div class="ad_ps_tbody_wrapper">
+    <table class="ad_ps_table">
+      <tbody>
+        <tr>
+          <td>Basic Salary</td>
+          <td>35000</td>
+          <td>0</td>
+          <td>35000</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td>Incentive</td>
+          <td>5000</td>
+          <td>0</td>
+          <td>5000</td>
+          <td>200</td>
+        </tr>
+        <!-- Add more rows; it will grow naturally -->
+      </tbody>
+    </table>
+  </div>
+
+  <table class="ad_ps_table">
+    <tfoot>
+      <tr>
+        <td colspan="4">Tax Deduction for this month</td>
+        <td>₹171,233.00</td>
+      </tr>
+    </tfoot>
+  </table>
+
+</div>
+
+</body>
+</html>

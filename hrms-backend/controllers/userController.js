@@ -38,32 +38,45 @@ exports.createUser = async (req, res) => {
     name,
     email,
     password,
-    role,
-    departmentId,
     phone,
-    gender,
     dob,
+    gender,
+    address,
+    designation,
     joinDate,
-    address
+    salary,
+    profileImage,
+    status,
+    role,
+    accountNumber,
+    departmentId
   } = req.body;
 
   try {
-    const hashedPassword = await bcrypt.hash(password, 10); // hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = await User.create({
       name,
       email,
       password: hashedPassword,
-      role,
-      departmentId,
       phone,
-      gender,
       dob,
+      gender,
+      address,
+      designation,
       joinDate,
-      address
+      salary,
+      profileImage,
+      status,
+      role,
+      accountNumber,
+      departmentId
     });
 
-    res.status(201).json(newUser);
+    const userWithoutPassword = newUser.toJSON();
+    delete userWithoutPassword.password;
+
+    res.status(201).json(userWithoutPassword);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Failed to create user' });
@@ -75,31 +88,46 @@ exports.createUser = async (req, res) => {
 exports.updateUser = async (req, res) => {
   const {
     name,
-    role,
-    departmentId,
     phone,
-    gender,
     dob,
-    joiningDate,
-    address
+    gender,
+    address,
+    designation,
+    joinDate,
+    salary,
+    profileImage,
+    status,
+    role,
+    accountNumber,
+    departmentId
   } = req.body;
 
   try {
     const user = await User.findByPk(req.params.id);
     if (!user) return res.status(404).json({ error: 'User not found' });
 
-    user.name = name || user.name;
-    user.role = role || user.role;
-    user.departmentId = departmentId || user.departmentId;
-    user.phone = phone || user.phone;
-    user.gender = gender || user.gender;
-    user.dob = dob || user.dob;
-    user.joiningDate = joiningDate || user.joiningDate;
-    user.address = address || user.address;
+    user.name = name ?? user.name;
+    user.phone = phone ?? user.phone;
+    user.dob = dob ?? user.dob;
+    user.gender = gender ?? user.gender;
+    user.address = address ?? user.address;
+    user.designation = designation ?? user.designation;
+    user.joinDate = joinDate ?? user.joinDate;
+    user.salary = salary ?? user.salary;
+    user.profileImage = profileImage ?? user.profileImage;
+    user.status = status ?? user.status;
+    user.role = role ?? user.role;
+    user.accountNumber = accountNumber ?? user.accountNumber;
+    user.departmentId = departmentId ?? user.departmentId;
 
     await user.save();
-    res.json(user);
+
+    const userWithoutPassword = user.toJSON();
+    delete userWithoutPassword.password;
+
+    res.json(userWithoutPassword);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: 'Failed to update user' });
   }
 };

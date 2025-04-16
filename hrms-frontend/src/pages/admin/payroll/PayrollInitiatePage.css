@@ -1,0 +1,59 @@
+.ad_pr_container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.ad_pr_heading {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.ad_pr_filters {
+  margin-bottom: 20px;
+}
+
+.ad_pr_label {
+  margin-right: 10px;
+}
+
+.ad_pr_input {
+  padding: 5px;
+  margin-right: 10px;
+  width: fit-content;
+}
+.ad_pr_btn_fetch{
+  margin-left: 20px;
+}
+.ad_pr_button,.ad_pr_btn_fetch {
+  padding: 6px 12px;
+  background-color: #007bff;
+  border: none;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.ad_pr_button:hover {
+  background-color: #0056b3;
+}
+
+.ad_pr_table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.ad_pr_table th,
+.ad_pr_table td {
+  text-align: center;
+  padding: 10px;
+}
+
+.ad_pr_select {
+  padding: 5px;
+}
+
+.ad_pr_bulk_generate {
+  margin-top: 15px;
+  background-color: green;
+}
