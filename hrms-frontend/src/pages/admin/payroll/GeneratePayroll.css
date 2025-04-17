@@ -1,0 +1,108 @@
+.ad_pg_generate_container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .ad_pg_title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .ad_pg_form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .ad_pg_label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #555;
+  }
+  
+  .ad_pg_input {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+    color: #333;
+    transition: border 0.3s ease;
+  }
+  
+  .ad_pg_input:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+  
+  .ad_pg_calculate_btn,
+  .ad_pg_generate_btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .ad_pg_calculate_btn:hover,
+  .ad_pg_generate_btn:hover {
+    background-color: #218838;
+  }
+  
+  .ad_pg_payroll_summary {
+    padding: 10px;
+    background-color: #f1f1f1;
+    border-radius: 4px;
+    color: #333;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 20px;
+  }
+  
+  .ad_pg_back_btn {
+    padding: 10px 15px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .ad_pg_back_btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .ad_pg_form input[type="number"],
+  .ad_pg_form select {
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .ad_pg_calculate_btn:disabled,
+  .ad_pg_generate_btn:disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
+  }
+  
+  .ad_pg_loading {
+    font-size: 16px;
+    font-weight: 600;
+    color: #007bff;
+  }
+  
+  .ad_pg_back_btn {
+    margin-top: 30px;
+    display: inline-block;
+    text-align: center;
+  }
+  

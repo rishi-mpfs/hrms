@@ -1,310 +1,321 @@
 // controllers/payrollController.js
-// controllers/payrollController.js
-const { Payroll, User } = require('../models');
+const { Payroll, User, Attendance,Department } = require('../models');
 const { Op } = require('sequelize');
 
-exports.initiatePayrollView = async (req, res) => {
+// Get Payroll Generation Status
+exports.getPayrollGenerationStatus = async (req, res) => {
+  const { month, year } = req.query;
+
+  if (!month || !year) {
+    return res.status(400).json({ error: 'Month and Year are required' });
+  }
+
+  const parsedMonth = parseInt(month, 10);
+  const parsedYear = parseInt(year, 10);
+
+  if (isNaN(parsedMonth) || isNaN(parsedYear)) {
+    return res.status(400).json({ error: 'Month and Year must be valid numbers' });
+  }
+
   try {
-    const { month, year } = req.query;
-
-    if (!month || !year) {
-      return res.status(400).json({ error: 'Month and Year are required' });
-    }
-
-    // Get all active users
     const users = await User.findAll({
-      where: { status: 'active' },
-      attributes: ['id', 'name', 'designation', 'salary']
+      attributes: ['id', 'name', 'email', 'salary', 'accountNumber'],
     });
 
-    // Fetch all payrolls for this month/year
     const payrolls = await Payroll.findAll({
-      where: { month, year },
-      include: { model: User, attributes: ['id'] }
+      where: { month: parsedMonth, year: parsedYear },
+      attributes: ['id', 'userId', 'status'],
     });
 
-    // Create a mapping of userId => payroll
-    const payrollMap = {};
+    // Map payrolls by userId for quick lookup
+    const payrollMap = new Map();
     payrolls.forEach(p => {
-      payrollMap[p.userId] = p;
+      payrollMap.set(p.userId, { payrollId: p.id, status: p.status });
     });
 
-    // Prepare combined list
     const result = users.map(user => {
-      const existing = payrollMap[user.id];
-      if (existing) {
-        return {
-          id: existing.id,
-          userId: user.id,
-          name: user.name,
-          designation: user.designation,
-          baseSalary: existing.baseSalary,
-          bonus: existing.bonus,
-          deductions: existing.deductions,
-          netSalary: existing.netSalary,
-          status: existing.status,
-          generated: true,
-          generatedAt: existing.updatedAt
-        };
-      } else {
-        return {
-          userId: user.id,
-          name: user.name,
-          designation: user.designation,
-          baseSalary: user.salary,
-          bonus: 0,
-          deductions: 0,
-          netSalary: user.salary,
-          status: 'unpaid',
-          generated: false
-        };
-      }
+      const payroll = payrollMap.get(user.id);
+      return {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        salary: user.salary,
+        accountNumber: user.accountNumber,
+        generated: !!payroll,
+        status: payroll ? payroll.status : 'not generated',
+        payrollId: payroll ? payroll.payrollId : null
+      };
     });
 
-    res.json({ employees: result });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Failed to prepare payroll list', details: err.message });
+    res.json({ month: parsedMonth, year: parsedYear, employees: result });
+
+  } catch (error) {
+    console.error('Error fetching payroll status:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
-// Fetch payroll list with details for all employees for a specific month and year
-exports.getPayrollList = async (req, res) => {
-    try {
-      const { month, year } = req.query;
-  
-      if (!month || !year) {
-        return res.status(400).json({ error: 'Month and Year are required' });
-      }
-  
-      // Fetch payrolls for the given month and year
-      const payrolls = await Payroll.findAll({
-        where: { month, year },
-        include: {
-          model: User,
-          attributes: ['id', 'name', 'designation']
-        },
-        order: [['createdAt', 'ASC']] // Order by creation date
-      });
-  
-      // If no payroll records found
-      if (payrolls.length === 0) {
-        return res.status(404).json({ error: 'No payroll records found for this month/year' });
-      }
-  
-      // Prepare payrolls list with generated flag
-      const payrollsWithGeneratedStatus = payrolls.map(payroll => {
-        return {
-          id: payroll.id,
-          user: payroll.User.name,
-          designation: payroll.User.designation,
-          salary: payroll.baseSalary,
-          bonus: payroll.bonus || 0,
-          deductions: payroll.deductions || 0,
-          netSalary: payroll.netSalary,
-          status: payroll.status,
-          generated: payroll.generated, // include generated field
-          generatedAt: payroll.updatedAt,
-          canDownloadPayslip: payroll.generated, // Allow download if generated
-        };
-      });
-  
-      // Return payroll list with employee details and generated status
-      res.json({ payrolls: payrollsWithGeneratedStatus });
-    } catch (err) {
-      res.status(500).json({ error: 'Failed to fetch payroll records', details: err.message });
-    }
-  };
-//   const { Payroll, User } = require('../../models'); // adjust as per your path
 
-exports.generateBulkPayroll = async (req, res) => {
-  const { month, year, bonuses = {}, deductions = {} } = req.body;
+exports.getPayrollUserDetails = async (req, res) => {
+  try {
+    const { userId, month, year } = req.params;
+
+    // Fetch the user details (accountNumber, baseSalary)
+    const user = await User.findOne({ where: { id: userId } });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const { accountNumber, salary: baseSalary, name, designation } = user;
+
+    // Calculate rate per day (assuming 30 days in a month)
+    const ratePerDay = baseSalary / 30;
+
+    // Calculate the start and end of the month
+    const startDate = new Date(`${year}-${String(month).padStart(2, '0')}-01`);
+    const endDate = new Date(year, month, 0); // Automatically handles the last day of the month
+
+    // Get attendance records for the given user, month, and year
+    const attendanceRecords = await Attendance.findAll({
+      where: {
+        userId,
+        date: {
+          [Op.between]: [startDate, endDate]
+        },
+        status: {
+          [Op.in]: ['present', 'late'] // Both present and late count as paydays
+        }
+      }
+    });
+
+    const payDays = attendanceRecords.length;
+
+    // Respond with the user details, pay rate, and attendance data
+    return res.status(200).json({
+      userDetails: {
+        id: user.id,
+        name,
+        accountNumber,
+        designation,
+        baseSalary,
+        ratePerDay,
+        payDays,
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching payroll user details:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+// Generate Payroll
+exports.generatePayroll = async (req, res) => {
+  try {
+    const {
+      userId,
+      month,
+      year,
+      accountNumber,
+      baseSalary,
+      ratePerDay,
+      payDays,
+      specialAllowance = 0,
+      mobileAllowance = 0,
+      travelAllowance = 0,
+      houseAllowance = 0,
+      incentive = 0,
+      deduction = 0,
+      taxDeduction = 0,
+      grossPay,
+      netPay,
+      paymentMode,
+    } = req.body;
+
+    // Check if payroll already exists
+    const existing = await Payroll.findOne({ where: { userId, month, year } });
+    if (existing) {
+      return res.status(400).json({ error: 'Payroll already generated for this user in the given month' });
+    }
+
+    const status = 'unpaid';
+
+    const payroll = await Payroll.create({
+      userId,
+      month,
+      year,
+      accountNumber,
+      baseSalary,
+      ratePerDay,
+      payDays,
+      specialAllowance,
+      mobileAllowance,
+      travelAllowance,
+      houseAllowance,
+      incentive,
+      deduction,
+      taxDeduction,
+      grossPay,
+      netPay,
+      paymentMode,
+      status,
+      generated: true
+    });
+
+    res.status(201).json({ message: 'Payroll generated successfully', payroll });
+  } catch (error) {
+    console.error('Payroll generation error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
+// Optional: Update payroll status to 'paid' after payment
+exports.updatePayrollStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    if (!status) {
+      return res.status(400).json({ error: 'Status is required in the request body' });
+    }
+
+    const payroll = await Payroll.findByPk(id);
+
+    if (!payroll) {
+      return res.status(404).json({ error: 'Payroll not found' });
+    }
+
+    payroll.status = status;
+    await payroll.save();
+
+    res.status(200).json({
+      message: `Payroll status updated to "${status}"`,
+      payroll
+    });
+  } catch (error) {
+    console.error('Error updating payroll status:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
+exports.getPayrollSummary = async (req, res) => {
+  const { payrollId } = req.params;
 
   try {
-    const users = await User.findAll();
-
-    for (let user of users) {
-      const existing = await Payroll.findOne({
-        where: {
-          userId: user.id,
-          month,
-          year,
-        },
-      });
-
-      if (existing) continue; // Skip already generated payrolls
-
-      const baseSalary = user.salary || 30000;
-      const bonus = bonuses[user.id] || 0;
-      const deduction = deductions[user.id] || 0;
-      const netSalary = baseSalary + bonus - deduction;
-
-      await Payroll.create({
-        userId: user.id,
-        month,
-        year,
-        baseSalary,
-        bonus,
-        deductions: deduction,
-        netSalary,
-        status: 'unpaid',
-      });
-    }
-
-    return res.status(200).json({ message: 'Bulk payroll generated successfully' });
-  } catch (error) {
-    console.error('Bulk payroll error:', error.message);
-    return res.status(500).json({ error: 'Bulk payroll generation failed' });
-  }
-};
-
-// controllers/admin/payrollController.js
-// const { Payroll, User } = require('../../models');
-
-exports.generatePayroll = async (req, res) => {
-    const { userId, month, year, bonus, deductions } = req.body;
-  
-    try {
-      // Check if payroll already exists
-      const existing = await Payroll.findOne({
-        where: {
-          userId,
-          month,
-          year
-        }
-      });
-  
-      if (existing) {
-        return res.status(400).json({ message: 'Payroll already generated for this user' });
-      }
-  
-      // Get user base salary
-      const user = await User.findByPk(userId);
-      if (!user) return res.status(404).json({ message: 'User not found' });
-  
-      const baseSalary = user.salary || 30000; // fallback
-  
-      const netSalary = baseSalary + (bonus || 0) - (deductions || 0);
-  
-      // Create payroll record
-      const payroll = await Payroll.create({
-        userId,
-        month,
-        year,
-        baseSalary,
-        bonus,
-        deductions,
-        netSalary,
-        status: 'unpaid'
-      });
-  
-      res.status(201).json({ message: 'Payroll generated successfully', payroll });
-    } catch (err) {
-      console.error('Generate payroll error:', err);
-      res.status(500).json({ message: 'Server error' });
-    }
-  };
-  
-
-  // Generate payroll for a single user (or for all users for the given month/year)
-//   exports.generatePayrollForUser = async (req, res) => {
-//     try {
-//       const { userId } = req.params;
-//       const { month, year } = req.body;
-  
-//       const user = await User.findByPk(userId);
-//       if (!user) return res.status(404).json({ error: 'User not found' });
-  
-//       // Check if the payroll for the given month and year already exists
-//       const exists = await Payroll.findOne({ where: { userId, month, year } });
-//       if (exists && exists.generated) {
-//         return res.status(400).json({ error: 'Payroll already generated for this user/month' });
-//       }
-  
-//       const netSalary = user.salary;
-  
-//       const payroll = await Payroll.create({
-//         userId,
-//         month,
-//         year,
-//         baseSalary: user.salary,
-//         bonus: 0,
-//         deductions: 0,
-//         netSalary,
-//         status: 'unpaid',
-//         generated: true, // Set generated to true
-//       });
-  
-//       res.json({ message: 'Payroll generated', payroll });
-//     } catch (err) {
-//       res.status(500).json({ error: 'Failed to generate payroll', details: err.message });
-//     }
-//   };
-
-
-  exports.updatePayrollStatus = async (req, res) => {
-    try {
-      const {id } = req.params;
-      const { status } = req.body;
-  
-      if (!['paid', 'unpaid'].includes(status)) {
-        return res.status(400).json({ error: 'Invalid status. Must be paid or unpaid.' });
-      }
-  
-      const payroll = await Payroll.findByPk(id);
-      if (!payroll) return res.status(404).json({ error: 'Payroll record not found' });
-  
-      payroll.status = status;
-      await payroll.save();
-  
-      res.json({ message: `Payroll marked as ${status}`, payroll });
-    } catch (err) {
-      res.status(500).json({ error: 'Failed to update status', details: err.message });
-    }
-  };
-  // Controller to handle downloading payslip
-  exports.downloadPayslip = async (req, res) => {
-    try {
-      const { id } = req.params;
-  
-      const payroll = await Payroll.findOne({
-        where: { id },
+    // Fetch payroll along with user info and department
+    const payroll = await Payroll.findOne({
+      where: { id: payrollId },
+      include: {
+        model: User,
+        attributes: ['id', 'name', 'email', 'designation', 'accountNumber'],
         include: {
-          model: User,
-          attributes: ['name', 'email', 'phone', 'designation']
+          model: Department,
+          attributes: ['name']
         }
-      });
-  
-      if (!payroll || !payroll.User) {
-        return res.status(404).json({ error: 'Payroll record or user not found' });
       }
-  
-      const { name, email, phone, designation, accountNumber} = payroll.User;
-      const netPay = payroll.netSalary;
-  
-      const payslip = {
-        
-        payrollId: payroll.id,
-        employeeName: name,
-        email,
-        phone,
-        accountNumber: `XXXXXX${accountNumber?.slice(-4) || '****'}`,
-        designation,
+    });
+
+    if (!payroll) {
+      return res.status(404).json({ error: 'Payroll not found' });
+    }
+
+    const { userId, month, year } = payroll;
+
+    // Define the start and end of the month
+    const startDate = new Date(`${year}-${String(month).padStart(2, '0')}-01`);
+    const endDate = new Date(year, month, 0);
+
+    // Count present/late days
+    const payDaysCount = await Attendance.count({
+      where: {
+        userId,
+        date: {
+          [Op.between]: [startDate, endDate],
+        },
+        status: {
+          [Op.in]: ['present', 'late']
+        }
+      }
+    });
+
+    res.status(200).json({
+      user: {
+        id: payroll.User.id,
+        name: payroll.User.name,
+        email: payroll.User.email,
+        designation: payroll.User.designation,
+        department: payroll.User.Department?.name || null,
+        accountNumber: payroll.User.accountNumber
+      },
+      payroll: {
+        id: payroll.id,
         month: payroll.month,
         year: payroll.year,
-        salary: payroll.baseSalary,
-        bonus: payroll.bonus || 0,
-        deductions: payroll.deductions || 0,
-        netPay,
+        accountNumber: payroll.accountNumber,
+        baseSalary: payroll.baseSalary,
+        ratePerDay: payroll.ratePerDay,
+        payDays: payDaysCount,
+        specialAllowance: payroll.specialAllowance,
+        mobileAllowance: payroll.mobileAllowance,
+        travelAllowance: payroll.travelAllowance,
+        houseAllowance: payroll.houseAllowance,
+        incentive: payroll.incentive,
+        deduction: payroll.deduction,
+        taxDeduction: payroll.taxDeduction,
+        grossPay: payroll.grossPay,
+        netPay: payroll.netPay,
         status: payroll.status,
-        generatedAt: payroll.updatedAt
-      };
-  
-      // Create PDF or other format (this is a simple mock response for now)
-      // You can use libraries like `pdfkit` or `html-pdf` for actual generation.
-      res.json({ message: 'Payslip generated', payslip });
-    } catch (err) {
-      res.status(500).json({ error: 'Failed to generate payslip', details: err.message });
+        paymentMode: payroll.paymentMode
+      }
+    });
+
+  } catch (error) {
+    console.error('Error fetching payroll summary:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
+
+// ==========user========
+
+// Get All Payrolls for a User (History)
+exports.getUserPayrollHistory = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    // Optional: validate user exists
+    const user = await User.findByPk(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
     }
-  };
-  
+
+    // Fetch payroll history for user
+    const payrolls = await Payroll.findAll({
+      where: { userId },
+      attributes: ['id', 'month', 'year', 'status'],
+      order: [['year', 'DESC'], ['month', 'DESC']],
+    });
+
+    const result = payrolls.map(p => ({
+      payrollId: p.id,
+      month: p.month,
+      year: p.year,
+      status: p.status
+    }));
+
+    res.status(200).json({
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email
+      },
+      payrollHistory: result
+    });
+
+  } catch (error) {
+    console.error('Error fetching user payroll history:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};

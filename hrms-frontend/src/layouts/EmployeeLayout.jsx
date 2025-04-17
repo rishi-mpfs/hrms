@@ -11,7 +11,7 @@ const EmployeeLayout = () => {
           {/* <Link to="/user/employees">Employees</Link> */}
           <Link to="/employee/attendance">Attendance</Link>
           <Link to="/employee/leaves">Leave</Link>
-          <Link to="/user/payroll">Payroll</Link>
+          <Link to="/employee/payroll">Payroll</Link>
         </nav>
       </aside>
       <main className="main-content">

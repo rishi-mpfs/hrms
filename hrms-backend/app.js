@@ -17,4 +17,5 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/admin',require('./routes/adminRoutes'));
 app.use('/api/user',require('./routes/userRoutes'))
+app.use('/api',require('./routes/commonRoutes'))
 module.exports = app;

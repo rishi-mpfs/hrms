@@ -31,9 +31,14 @@ router.put('/attendance/:id',attendanceController.updateAttendance);
 router.get('/leaves',leaveController.getAllLeaves);
 router.put('/leave/:id',leaveController.updateLeaveStatus);
 
-router.get('/payroll/initiate', payrollController.initiatePayrollView);
-router.post('/payroll/bulkgenerate',payrollController.generateBulkPayroll);
-router.post('/payroll/generate',payrollController.generatePayroll);
-router.put('/payroll/status/:id',payrollController.updatePayrollStatus);
-router.get('/payslip/:id',payrollController.downloadPayslip);
+router.get('/payroll', payrollController.getPayrollGenerationStatus);
+router.post('/payroll',payrollController.generatePayroll);
+router.put('/payroll/:id',payrollController.updatePayrollStatus);
+router.get('/payroll/userdetail/:userId/:month/:year',payrollController.getPayrollUserDetails);
+
+// router.get('/payroll/initiate', payrollController.initiatePayrollView);
+// router.post('/payroll/bulkgenerate',payrollController.generateBulkPayroll);
+// router.post('/payroll/generate',payrollController.generatePayroll);
+// router.put('/payroll/status/:id',payrollController.updatePayrollStatus);
+// router.get('/payslip/:id',payrollController.downloadPayslip);
 module.exports = router;

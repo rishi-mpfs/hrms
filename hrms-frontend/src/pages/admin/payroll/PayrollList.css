@@ -1,0 +1,137 @@
+/* Container for the payroll list */
+.ad_pl_container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Title for the payroll list */
+  .ad_pl_title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  /* Filters section */
+  .ad_pl_filter {
+    margin-bottom: 20px;
+  }
+  
+  /* Label for the month-year input */
+  .ad_pl_label {
+    font-size: 16px;
+    font-weight: bold;
+    margin-right: 10px;
+  }
+  
+  /* Month-year input */
+  .ad_pl_month_input {
+    padding: 8px;
+    font-size: 14px;
+    width: 150px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  /* Loading text */
+  .ad_pl_loading {
+    font-size: 16px;
+    font-weight: normal;
+    color: #777;
+  }
+  
+  /* Table structure */
+  .ad_pl_table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  /* Table header */
+  .ad_pl_head_row {
+    background-color: #f4f4f4;
+  }
+  
+  .ad_pl_th {
+    padding: 12px 15px;
+    font-size: 14px;
+    text-align: left;
+    border: 1px solid #ddd;
+  }
+  
+  /* Table rows */
+  .ad_pl_row {
+    background-color: #fff;
+  }
+  
+  .ad_pl_td {
+    padding: 12px 15px;
+    font-size: 14px;
+    text-align: left;
+    border: 1px solid #ddd;
+  }
+  
+  /* Name cell styling */
+  .ad_pl_name {
+    font-weight: bold;
+  }
+  
+  /* Status select dropdown */
+  .ad_pl_status_select {
+    padding: 6px 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  /* Status text when payroll is not generated */
+  .ad_pl_status_text {
+    color: red;
+    font-weight: bold;
+  }
+  
+  /* Buttons */
+  .ad_pl_view_btn,
+  .ad_pl_generate_btn {
+    padding: 6px 12px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .ad_pl_view_btn {
+    background-color: #4caf50;
+    color: white;
+  }
+  
+  .ad_pl_generate_btn {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  .ad_pl_view_btn:hover,
+  .ad_pl_generate_btn:hover {
+    opacity: 0.8;
+  }
+  
+  /* Additional styles for responsiveness */
+  @media (max-width: 768px) {
+    .ad_pl_table {
+      font-size: 12px;
+    }
+  
+    .ad_pl_th,
+    .ad_pl_td {
+      padding: 8px 10px;
+    }
+  
+    .ad_pl_month_input {
+      width: 120px;
+    }
+  
+    .ad_pl_view_btn,
+    .ad_pl_generate_btn {
+      font-size: 12px;
+    }
+  }
+  

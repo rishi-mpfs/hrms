@@ -4,6 +4,7 @@ const userController = require('../controllers/userController');
 const departmentController = require('../controllers/departmentController');
 const attendanceController = require('../controllers/attendanceController')
 const leaveController = require('../controllers/leaveController')
+const payrollController = require('../controllers/payrollController')
 const { verifyToken, requireRole } = require('../middleware/auth');
 
 router.use(verifyToken, requireRole(['employee']));
@@ -15,4 +16,6 @@ router.get('/attendance/:month',attendanceController.getMyMonthlyAttendance);
 
 router.get('/leave',leaveController.getAppliedLeaves);
 router.post('/leave',leaveController.applyLeave)
+
+router.get('/payroll',payrollController.getUserPayrollHistory)
 module.exports = router;

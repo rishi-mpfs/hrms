@@ -135,3 +135,39 @@
     justify-content: space-between;
   }
   
+
+
+  /* --------------------userpayroll-------- */
+  .us_pl_container {
+    padding: 20px;
+  }
+  
+  .us_pl_heading {
+    font-size: 24px;
+    margin-bottom: 16px;
+  }
+  
+  .us_pl_table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .us_pl_th,
+  .us_pl_td {
+    padding: 12px;
+    border: 1px solid #ccc;
+    text-align: left;
+  }
+  
+  .us_pl_btn {
+    padding: 6px 12px;
+    background-color: #1e88e5;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .us_pl_btn:hover {
+    background-color: #1565c0;
+  }
+  

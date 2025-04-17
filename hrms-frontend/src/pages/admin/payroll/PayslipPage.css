@@ -19,12 +19,23 @@
     margin-top: 5px;
     font-size: 16px;
   }
-  .ad_ps_section {
+  /* .ad_ps_detailsection {
+  
+   display: flex;
+   padding: 10px 20px;
+   justify-content: space-evenly;
+  } */
+  .ad_ps_detailsection div{
+  
    
-  }
+   }
+   .ad_ps_detailsection div th{
+    text-align: left;
+   }
   
   .ad_ps_table {
     width: 100%;
+    padding: 10px;
     border-collapse: collapse;
   }
   .ad_ps_table td {
@@ -65,10 +76,15 @@
     text-align: center;
     border: 1px solid black;
     padding: 5px;
+    text-transform: capitalize;
+    line-height: 14px;
   }
   .ad_ps_bold {
     font-weight: bold;
   }
+  .ad_ps_center span{
+    text-transform: uppercase;
+  } 
   .ad_ps_right {
     text-align: right;
   }
@@ -82,6 +98,10 @@
   .ad_ps_download_btn {
     text-align: center;
     margin-top: 30px;
+    background-color: blue;
+    color: white;
+    padding: 5px 10px;
+    border: none;
   }
   
 
@@ -110,4 +130,12 @@
     text-align: right;
   }
 
- 
+ .vi4p{
+  margin-top: 60px;
+  padding: 5px;
+ }
+ .ad_ps_foottext{
+  border: 1px solid black;
+  padding: 5px;
+  border-top: none;
+ }

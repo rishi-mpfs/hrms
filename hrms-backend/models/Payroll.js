@@ -7,35 +7,72 @@ const Payroll = sequelize.define('Payroll', {
   //   allowNull: false,
   // },
   month: {
-    type: DataTypes.STRING,
-    allowNull: false,
+    type: DataTypes.INTEGER,
+    allowNull: false
   },
   year: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  accountNumber: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: false
   },
   baseSalary: {
     type: DataTypes.FLOAT,
-    allowNull: false,
+    allowNull: false
   },
-  bonus: {
+  ratePerDay: {
     type: DataTypes.FLOAT,
-    allowNull: true,
-    defaultValue: 0,
+    allowNull: false
   },
-  deductions: {
-    type: DataTypes.FLOAT,
-    allowNull: true,
-    defaultValue: 0,
+  payDays: {
+    type: DataTypes.INTEGER,
+    allowNull: false
   },
-  netSalary: {
+  specialAllowance: {
     type: DataTypes.FLOAT,
-    allowNull: false,
+    defaultValue: 0
+  },
+  mobileAllowance: {
+    type: DataTypes.FLOAT,
+    defaultValue: 0
+  },
+  travelAllowance: {
+    type: DataTypes.FLOAT,
+    defaultValue: 0
+  },
+  houseAllowance: {
+    type: DataTypes.FLOAT,
+    defaultValue: 0
+  },
+  incentive: {
+    type: DataTypes.FLOAT,
+    defaultValue: 0
+  },
+  deduction: {
+    type: DataTypes.FLOAT,
+    defaultValue: 0
+  },
+  taxDeduction: {
+    type: DataTypes.FLOAT,
+    defaultValue: 0
+  },
+  grossPay: {
+    type: DataTypes.FLOAT,
+    allowNull: false
+  },
+  netPay: {
+    type: DataTypes.FLOAT,
+    allowNull: false
+  },
+  paymentMode: {
+    type: DataTypes.STRING,
+    allowNull: false
   },
   status: {
     type: DataTypes.STRING,
-    allowNull: false,
-    defaultValue: 'unpaid',
+    allowNull: false
   },
   generated: {
     type: DataTypes.BOOLEAN,

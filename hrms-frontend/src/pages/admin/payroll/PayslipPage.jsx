@@ -1,26 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import axios from 'axios';
-import html2pdf from 'html2pdf.js';
-import './PayslipPage.css';
-import logo from './../../../assets/logo.png';
+import React, { useEffect, useState } from "react";
 
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import inWords from "./../../../utils/numberToWords";
+import html2pdf from "html2pdf.js";
+import logo from "./../../../assets/logo.png";
+import "./PayslipPage.css";
 
 const PayslipPage = () => {
   const { id } = useParams();
-  const [payslip, setPayslip] = useState(null);
+  const [payslipData, setPayslipData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPayslip = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/admin/payslip/${id}`, {
+        const res = await axios.get(`http://localhost:5000/api/payslip/${id}`, {
           withCredentials: true,
         });
-        setPayslip(res.data.payslip);
+        setPayslipData(res.data);
         setLoading(false);
       } catch (err) {
-        console.error('Failed to fetch payslip:', err);
+        console.error("Error fetching payslip:", err);
         setLoading(false);
       }
     };
@@ -29,313 +31,411 @@ const PayslipPage = () => {
   }, [id]);
 
   const handleDownload = () => {
-    const element = document.getElementById('payslip-container');
-    html2pdf().from(element).save(`Payslip-${payslip?.employeeName}.pdf`);
+    const element = document.getElementById("payslip-container");
+    html2pdf().from(element).save(`Payslip-${payslipData?.user?.name}.pdf`);
+  };
+  const handleBack = () => {
+    navigate(-1);
   };
 
   if (loading) return <p>Loading payslip...</p>;
-  if (!payslip) return <p>Payslip not found.</p>;
+  if (!payslipData) return <p>Payslip not found.</p>;
+
+  const { user, payroll } = payslipData;
+
+  const generateTDSMonths = () => {
+    const currentDate = new Date(payroll.year, payroll.month - 1); // use payroll month
+    const months = [];
+
+    for (let i = 0; i < 12; i++) {
+      const date = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth() - i,
+        1
+      );
+      const monthName = date.toLocaleString("default", { month: "long" });
+      const year = date.getFullYear();
+      months.push(`${monthName} - ${year}`);
+    }
+
+    return months.reverse(); // optional: to show from Jan to Dec
+  };
 
   return (
     <div className="ad_ps_page">
       <div id="payslip-container" className="ad_ps_container">
-
-      <div class="ad_ps_header">
-      <img src={logo} class="ad_ps_logo" />
-      <div class="ad_ps_title">MP Investment and Financial Services</div>
-      <div>No 1/269, Kalamegam Salai,Mugappair West, Chennai - 600037</div>
-      <div>Pay Slip for the Month of <strong>March 2025</strong></div>
-    </div>
-    <div class="ad_ps_section">
-      <table class="ad_ps_table ap_ps_detail">
-        <tr width>
-          <td>Code</td><td>: 12345</td>
-          <td>Bank/MICR</td><td>: XXXX9999</td>
-        </tr>
-        <tr>
-          <td >Department</td><td>: IT</td>
-          <td>Bank A/c No.</td><td>: XXXXXX5678</td>
-        </tr>
-        <tr>
-          <td>Grade</td><td>: A1</td>
-          <td>Cost Center</td><td>: 001</td>
-        </tr>
-        <tr>
-          <td>DOB</td><td>: 01-Jan-1990</td>
-          <td>PAN</td><td>: AAAAA0000A</td>
-        </tr>
-        <tr>
-          <td>DOJ</td><td>: 01-Jan-2020</td>
-          <td>PF UAN</td><td>: 100000000000</td>
-        </tr>
-      </table>
-    </div>
-
-    <div class="ad_ps_section">
-      <table class="ad_ps_table ap_ps_ed">
-        <thead>
-            <tr>
-                <th colspan="5">Earnings</th>
-                <th colspan="2">Deductions</th>
-            </tr>
-        </thead>
-        <thead class="ad_ps_gray">
-          <tr>
-            <th>Description</th><th>Rate</th><th>Monthly</th><th>Arrear</th><th>Total</th>
-            <th>Description</th><th>Amount</th>
-          </tr>
-        </thead>
-        <tr>
-          <td>Basic salery</td><td className='ps_price'>11160</td><td className='ps_price'>0</td><td className='ps_price'>0</td><td className='ps_price'>0</td><td>Income Tax</td><td className='ps_price'>171233.00</td>
-        </tr>
-        <tr>
-          <td>House allowence</td><td className='ps_price'>5600</td><td className='ps_price'>0</td><td className='ps_price'>0</td><td className='ps_price'>0</td><td></td><td></td>
-        </tr>
-        <tr>
-          <td>Monthly threshold pay</td><td className='ps_price'>22300</td><td className='ps_price'>0</td><td className='ps_price'>0</td><td className='ps_price'>0</td><td></td><td></td>
-        </tr>
-        <tr>
-          <td>convenience</td><td className='ps_price'>22300</td><td className='ps_price'>0</td><td className='ps_price'>0</td><td className='ps_price'>0</td><td></td><td></td>
-        </tr>
-        <tr>
-            <td>spacial allowance</td><td className='ps_price'>22300</td><td className='ps_price'>0</td><td className='ps_price'>0</td><td className='ps_price'>0</td><td className='ps_price'></td><td className='ps_price'></td>
-        </tr>
-        <tr>
-            <td>Traval  allowance</td><td className='ps_price'>22300</td><td className='ps_price'>0</td><td className='ps_price'>0</td><td className='ps_price'>0</td><td className='ps_price'></td><td className='ps_price'></td>
-        </tr>
-
-        <tr className="ad_ps_gray ad_ps_bold">
-          <td colspan="4">Gross Earning: </td>
-          <td className='ps_price'>₹ 50218.00</td>
-          <td colspan="">Gross Deduction</td><td className='ps_price'>₹ 171233.00</td>
-        </tr>
-        
-      
-
-       
-      </table>
-      <table className='ad_ps_ctb'>
-      <tr className="ad_ps_bold">
-          <td className="ad_ps_center">Net Pay : ₹ 378985.00 (THREE LAKHS SEVENTY EIGHT THOUSAND NINE HUNDRED EIGHTY FIVE ONLY)</td>
-        </tr>
-        <tr className="ad_ps_bold">
-          <td className="ad_ps_center">Income tax work sheet for march-2025</td>
-        </tr>
-      </table>
-      {/* <table width="100%" className='ad_ps_nestable'>
-        <tr>
-          <td width="60%" valign="top">
-            <table border="1" width="100%" className='ad_ps_nestable'>
-              <tr className="lasttd"><th colSpan={6}>Earnings</th></tr>
-              <tr className='lasttd'><th>Description</th><th>Rate</th><th>Monthly</th><th>Arrear</th><th>Total</th></tr>
-              <tr className="lasttd"><td>Basic salery</td><td className="ps_price">12000</td><td className="ps_price">0</td><td className="ps_price">0</td><td className="ps_price">12000</td></tr>
-              <tr className="lasttd"><td>House allowence</td><td className="ps_price">12000</td><td className="ps_price">0</td><td className="ps_price">0</td><td className="ps_price">12000</td></tr>
-              <tr className="lasttd"><td>Monthly threshold pay</td><td className="ps_price">12000</td><td className="ps_price">0</td><td className="ps_price">0</td><td className="ps_price">12000</td></tr>
-              <tr className="lasttd"><td>convenience</td><td className="ps_price">12000</td><td className="ps_price">0</td><td className="ps_price">0</td><td className="ps_price">12000</td></tr>
-              <tr className="lasttd"><td>spacial allowance</td><td className="ps_price">12000</td><td className="ps_price">0</td><td className="ps_price">0</td><td className="ps_price">12000</td></tr>
-              <tr className="lasttd"><td>Mobile allowance</td><td className="ps_price">12000</td><td className="ps_price">0</td><td className="ps_price">0</td><td className="ps_price">12000</td></tr>
-              <tr className="lasttd"><td>Traval allowance</td><td className="ps_price">12000</td><td className="ps_price">0</td><td className="ps_price">0</td><td className="ps_price">12000</td></tr>
-              <tr className="lasttd"><td><strong>Gross Earning:</strong></td><td className="ps_price"><strong>12000</strong></td><td className="ps_price"><strong>12000</strong></td><td className="ps_price"><strong>12000</strong></td><td className="ps_price"><strong>12000</strong></td></tr>
-              
-              
-            </table>
-          </td>
-          <td width="40%" valign="top" height="100%">
-            <table border="1" width="100%" className='ad_ps_nestable'>
-              <tr className="lasttd"><th colSpan={2}>Deductions</th></tr>
-              <tr className="lasttd"><th>Description</th><th>Amount</th></tr>
-              <tr className="lasttd"><td>Tax deduction</td><td className="ps_price">2333</td></tr>
-            </table>
-          </td>
-        </tr>
-      </table> */}
-
-      <table border="1" width="100%" className='ad_ps_nestable'>
-        <tr>
-          {/* <!-- Left Column --> */}
-          <td width="33%" valign="top">
-            <table border="1" width="100%" className='ad_ps_nestable'>
-              <tr className='lasttd'><th>Description</th><th>Gross</th><th>Exempt</th><th>Taxable</th></tr>
-              <tr className='lasttd'><td>Incentive</td><td className='ps_price'>3456576.00</td><td className='ps_price'>0.00</td><td className='ps_price'>3456576.00</td></tr>
-              {/* <!-- More rows if needed --> */}
-            </table>
-            <table border="1" width="100%" className='ad_ps_nestable'>
-              <tr className='lasttd'><th colSpan={4}>Deduction</th></tr>
-              <tr className='lasttd'><td>Incentive</td><td className='ps_price'>3456576.00</td></tr>
-              <tr className='lasttd'><td>Incentive</td><td className='ps_price'>345</td></tr>
-              <tr className='lasttd'><td>Incentive</td><td className='ps_price'>345</td></tr>
-              <tr className='lasttd'><td>Incentive</td><td className='ps_price'>345</td></tr>
-              <tr className='lasttd'><td>Incentive</td><td className='ps_price'>345</td></tr>
-              <tr className='lasttd'><td>Incentive</td><td className='ps_price'>345</td></tr>
-              <tr className='lasttd'><td>Incentive</td><td className='ps_price'>345</td></tr>
-              <tr className='lasttd'><td>Incentive</td><td className='ps_price'>345</td></tr>
-              <tr className='lasttd'><td>Incentive</td><td className='ps_price'>345</td></tr>
-
-              {/* <!-- More rows if needed --> */}
-            </table>
-          </td>
-      
-         
-          <td width="34%" valign="top" >
-            
-            <table border="1" width="100%" className='ad_ps_nestable'>
-              <tr  className='lasttd'><th colSpan={2}>Deduction under chapter vi-A</th></tr>
-              <tr  className='lasttd'><td>Standard Deduction</td><td className='ps_price'>75000.00</td></tr>
-              <tr  className='lasttd'><td>Professional Tax</td><td className='ps_price'>0.00</td></tr>
-              {/* <!-- Add more deduction rows -- */}
-            </table>
-            <p><strong>Tax Deduction for this month:</strong> 171233.00</p>
-          </td>
-      
-        
-          <td width="33%" valign="top">
-            
-            <table border="1" width="100%" className='ad_ps_nestable'>
-              <tr className='lasttd'><th colSpan={2}>Taxable HRA Calculation</th></tr>
-              <tr className='lasttd'><td>Rent Paid</td><td className='ps_price'>0.00</td></tr>
-              <tr className='lasttd'><td><strong>Taxable HRA</strong></td><td className='ps_price'>0.00</td></tr>
-            </table>
-            
-           
-            
-            
-            <table border="1" width="100%" className='ad_ps_nestable'>
-              <tr className='lasttd'><th colSpan={2}>TDS Deducted Monthly</th></tr>
-              <tr className='lasttd'><th>Month</th><th>Amount</th></tr>
-              <tr className='lasttd'><td>April-2024</td><td className='ps_price'>86796.00</td></tr>
-              <tr className='lasttd'><td>April-2024</td><td className='ps_price'>86796.00</td></tr>
-              <tr className='lasttd'><td>April-2024</td><td className='ps_price'>86796.00</td></tr>
-              <tr className='lasttd'><td>April-2024</td><td className='ps_price'>86796.00</td></tr>
-              <tr className='lasttd'><td>April-2024</td><td className='ps_price'>86796.00</td></tr>
-              <tr className='lasttd'><td>April-2024</td><td className='ps_price'>86796.00</td></tr>
-              <tr className='lasttd'><td>April-2024</td><td className='ps_price'>86796.00</td></tr>
-              <tr className='lasttd'><td><strong>Total</strong></td><td className='ps_price'>732652.00</td></tr>
-            </table>
-          </td>
-        </tr>
-      </table>
-
-
-      {/* <table class="ad_ps_table">
-        <thead class="ad_ps_gray">
-            <tr>
-            <th>Description</th>
-            <th>gross</th>
-            <th>Exempt</th>
-            <th>texable</th>
-            <th colspan="2"> Deduction under chapter vi-A</th>
-            <th colspan="2">taxable HRA Calculation</th>
-        </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td class="">incentive</td>
-                <td>000</td>
-                <td>0.00</td>
-                <td>34444</td>
-                <td rowspan="4">Investment
-                    
-                </td>
-                <td rowspan="4">4566</td>
-                <td rowspan="4">Taxable HRA Calculation</td>
-                <td rowspan="4">4566</td>
-            </tr>
-            <tr>
-                <td>gross</td>
-                <td>4342</td>
-                <td>0.4</td>
-                <td>232323</td>
-            </tr>
-            <tr>
-                <td colspan="4">deduction</td>
-            </tr>
-            <tr>
-                <td colspan="3">jsdfjjwj w</td>
-                <td></td>
-             
-            </tr>
-            <tr>
-                <td colspan="3">jsdfjjwj w</td>
-                <td></td>
-             
-            </tr>
-            <tr>
-                <td colspan="3">jsdfjjwj w</td>
-                <td ></td>
-             
-            </tr>
-        </tbody>
-      </table> */}
-    </div>
-
-
-
-
-
-
-
-
-
-
-{/* 
-        <div className="ad_ps_logo">STAR LOGO</div>
-
-        <h2 className="ad_ps_title">Payslip</h2>
-
-        <div className="ad_ps_info">
-          <p><strong>Serial:</strong> {payslip.serial || 'PS-XXXX'}</p>
-          <p><strong>Pay Date:</strong> {new Date(payslip.generatedAt).toLocaleDateString()}</p>
-          <p><strong>Pay Period:</strong> {payslip.month} {payslip.year}</p>
-        </div>
-
         <div className="ad_ps_header">
-          <div className="ad_ps_employee">
-            <h4>{payslip.employeeName}</h4>
-            <p>Employee ID: {payslip.employeeId || '123456'}</p>
-            <p>Email: {payslip.email}</p>
-            <p>Position: {payslip.designation}</p>
-            <p>Account Number: {payslip.accountNumber}</p>
-            <p>Phone: {payslip.phone}</p>
+          <img src={logo} alt="Company Logo" className="ad_ps_logo" />
+          <div className="ad_ps_title">
+            MP Investment and Financial Services
           </div>
-
-          <div className="ad_ps_company">
-            <h4>MP Investment and Financial Services</h4>
-            <p>No 1/269, Kalamegam Salai</p>
-            <p>Mugappair West, Chennai - 600037</p>
-            <p>Tamilnadu - India</p>
-            <p>info@moneyprotect.in</p>
-            <p>044 - 43515522</p>
+          <div>No 1/269, Kalamegam Salai, Mugappair West, Chennai - 600037</div>
+          <div>
+            Pay Slip for the Month of{" "}
+            <strong>
+              {new Date(payroll.year, payroll.month - 1).toLocaleString(
+                "default",
+                { month: "long" }
+              )}{" "}
+              {payroll.year}
+            </strong>
           </div>
         </div>
 
-        <div className="ad_ps_payment_mode">
-          <strong>Payment Details:</strong>
-          <p>Bank Transfer</p>
+        <div className="ad_ps_detailsection ad_ps_section">
+          <table className="ad_ps_table ap_ps_detail">
+            <tbody>
+              <tr>
+                <td>Name</td>
+                <td>: {user.name}</td>
+                <td>Department</td>
+                <td>: {user.department}</td>
+              </tr>
+              <tr>
+                <td>Email</td>
+                <td>: {user.email}</td>
+                <td>Designation</td>
+                <td>: {user.designation}</td>
+              </tr>
+              <tr>
+                <td>Account Number</td>
+                <td>: {user.accountNumber}</td>
+                <td>Payment Mode</td>
+                <td>: {payroll.paymentMode}</td>
+              </tr>
+              <tr>
+                <td>Status</td>
+                <td>: {payroll.status}</td>
+                <td>Pay Days</td>
+                <td>: {payroll.payDays}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
-        <table className="ad_ps_table">
-          <thead>
-            <tr>
-              <th>Earnings</th>
-              <th>Quantity</th>
-              <th>Rate</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-         
+        <div className="ad_ps_section">
+          <table className="ad_ps_table ap_ps_ed">
+            <thead>
+              <tr>
+                <th colSpan="5">Earnings</th>
+                <th colSpan="2">Deductions</th>
+              </tr>
+              <tr className="ad_ps_gray">
+                <th>Description</th>
+                <th>Rate</th>
+                <th>Monthly</th>
+                <th>Arrear</th>
+                <th>Total</th>
+                <th>Description</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Base Salary</td>
+                <td className="ps_price">{payroll.ratePerDay}</td>
+                <td className="ps_price">{payroll.baseSalary}</td>
+                <td className="ps_price">-</td>
+                <td className="ps_price">
+                  {payroll.ratePerDay * payroll.payDays}
+                </td>
+                <td>Deduction</td>
+                <td className="ps_price">{payroll.deduction}</td>
+              </tr>
+              <tr>
+                <td>Special Allowance</td>
+                <td className="ps_price">-</td>
+                <td className="ps_price">{payroll.specialAllowance}</td>
+                <td className="ps_price">-</td>
+                <td className="ps_price">{payroll.specialAllowance}</td>
+                <td>Tax Deduction</td>
+                <td className="ps_price">{payroll.taxDeduction}</td>
+              </tr>
+              <tr>
+                <td>Mobile Allowance</td>
+                <td className="ps_price">-</td>
+                <td className="ps_price">{payroll.mobileAllowance}</td>
+                <td className="ps_price">-</td>
+                <td className="ps_price">{payroll.mobileAllowance}</td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Travel Allowance</td>
+                <td className="ps_price">-</td>
+                <td className="ps_price">{payroll.travelAllowance}</td>
+                <td className="ps_price">-</td>
+                <td className="ps_price">{payroll.travelAllowance}</td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>House Allowance</td>
+                <td className="ps_price">-</td>
+                <td className="ps_price">{payroll.houseAllowance}</td>
+                <td className="ps_price">-</td>
+                <td className="ps_price">{payroll.houseAllowance}</td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Incentive</td>
+                <td className="ps_price">-</td>
+                <td className="ps_price">{payroll.incentive}</td>
+                <td className="ps_price">-</td>
+                <td className="ps_price">{payroll.incentive}</td>
+                <td></td>
+                <td></td>
+              </tr>
+
+              <tr className="ad_ps_gray ad_ps_bold">
+                <td colSpan="4">Gross Earnings:</td>
+                <td className="ps_price">₹ {payroll.grossPay}</td>
+                <td>Gross Deductions</td>
+                <td className="ps_price">
+                  ₹ {payroll.deduction + payroll.taxDeduction}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table className="ad_ps_ctb">
+            <tbody>
+              <tr className="ad_ps_bold">
+                <td className="ad_ps_center">
+                  Net Pay : ₹ {payroll.netPay}
+                  <br />
+                  <span>(In words: {inWords(payroll.netPay)} Rupees Only)</span>
+                </td>
+              </tr>
+              <tr className="ad_ps_bold">
+                <td className="ad_ps_center">
+                  Income tax worksheet for{" "}
+                  {new Date(payroll.year, payroll.month - 1).toLocaleString(
+                    "default",
+                    { month: "long" }
+                  )}{" "}
+                  - {payroll.year}
+                  <br />* You have opted for new income tax regime
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <table border="1" width="100%" className="ad_ps_nestable">
+          <tr>
+            <td width="40%" valign="top">
+              <table border="1" width="100%" className="ad_ps_nestable">
+                <tr className="lasttd">
+                  <th>Description</th>
+                  <th>Gross</th>
+                  <th>Exempt</th>
+                  <th>Taxable</th>
+                </tr>
+                <tr className="lasttd">
+                  <td>Incentive</td>
+                  <td className="ps_price">0.00</td>
+                  <td className="ps_price">0.00</td>
+                  <td className="ps_price">0.00</td>
+                </tr>
+                <tr className="lasttd">
+                  <th colSpan={4}>Deduction</th>
+                </tr>
+                <tr className="lasttd">
+                  <td colSpan={3}>Standard Deduction</td>
+                  <td className="ps_price">0.00</td>
+                </tr>
+                <tr className="lasttd">
+                  <td colSpan={3}>Previous Employer Taxable Income</td>
+                  <td className="ps_price">0.00</td>
+                </tr>
+                <tr className="lasttd">
+                  <td colSpan={3}>Previous Employer Professional Tax</td>
+                  <td className="ps_price">0.00</td>
+                </tr>
+                <tr className="lasttd">
+                  <td colSpan={3}>Professional Tax</td>
+                  <td className="ps_price">0.00</td>
+                </tr>
+                <tr className="lasttd">
+                  <td colSpan={3}>Under Chapter VI-A</td>
+                  <td className="ps_price">0.00</td>
+                </tr>
+                <tr className="lasttd">
+                  <td colSpan={3}>Any Other Income</td>
+                  <td className="ps_price">0.00</td>
+                </tr>
+                <tr className="lasttd">
+                  <td colSpan={3}>Taxable Income</td>
+                  <td className="ps_price">0.00</td>
+                </tr>
+                <tr className="lasttd">
+                  <td colSpan={3}>Total Tax</td>
+                  <td className="ps_price">0.00</td>
+                </tr>
+                <tr className="lasttd">
+                  <td colSpan={3}>Tax Rebate u/s 87A</td>
+                  <td className="ps_price">0.00</td>
+                </tr>
+                <tr className="lasttd">
+                  <td colSpan={3}>Surcharge</td>
+                  <td className="ps_price">0.00</td>
+                </tr>
+                <tr className="lasttd">
+                  <td colSpan={3}>Tax Due</td>
+                  <td className="ps_price">0.00</td>
+                </tr>
+                <tr className="lasttd">
+                  <td colSpan={3}>Health and Education Cess</td>
+                  <td className="ps_price">0.00</td>
+                </tr>
+                <tr className="lasttd">
+                  <td colSpan={3}>
+                    <strong>Net Tax</strong>
+                  </td>
+                  <td className="ps_price">
+                    <strong>0.00</strong>
+                  </td>
+                </tr>
+                <tr className="lasttd">
+                  <td colSpan={3}>Tax Deducted (Previous Employer)</td>
+                  <td className="ps_price">0.00</td>
+                </tr>
+                <tr className="lasttd">
+                  <td colSpan={3}>Tax Deducted on Perq.</td>
+                  <td className="ps_price">0.00</td>
+                </tr>
+                <tr className="lasttd">
+                  <td colSpan={3}>Tax Deducted on Any Other Income</td>
+                  <td className="ps_price">0.00</td>
+                </tr>
+                <tr className="lasttd">
+                  <td colSpan={3}>
+                    <strong>Tax Deducted Till Date</strong>
+                  </td>
+                  <td className="ps_price">
+                    <strong>0.00</strong>
+                  </td>
+                </tr>
+                <tr className="lasttd">
+                  <td colSpan={3}>Tax to be Deducted</td>
+                  <td className="ps_price">0.00</td>
+                </tr>
+                <tr className="lasttd">
+                  <td colSpan={3}>Tax/Month</td>
+                  <td className="ps_price">0.00</td>
+                </tr>
+                <tr className="lasttd">
+                  <td colSpan={3}>Tax on Non-Recurring Earnings</td>
+                  <td className="ps_price">0.00</td>
+                </tr>
+                <tr className="lasttd">
+                  <td colSpan={3}>
+                    <strong>Tax Deduction for this month</strong>
+                  </td>
+                  <td className="ps_price">
+                    <strong>0.00</strong>
+                  </td>
+                </tr>
+              </table>
+            </td>
+
+            <td width="28%" valign="top" className="vi4con">
+              <table border="1" width="100%" className="ad_ps_nestable">
+                <tr className="lasttd">
+                  <th colSpan={2}>Deduction under chapter vi-A</th>
+                </tr>
+                <tr className="lasttd">
+                  <td>Standard Deduction</td>
+                  <td className="ps_price">0.00</td>
+                </tr>
+                <tr className="lasttd">
+                  <td>Professional Tax</td>
+                  <td className="ps_price">0.00</td>
+                </tr>
+              </table>
+              <p className="vi4p">
+                <strong>Tax Deduction for this month:</strong> 0.00
+              </p>
+            </td>
+
+            <td width="32%" valign="top">
+              <table border="1" width="100%" className="ad_ps_nestable">
+                <tr className="lasttd">
+                  <th colSpan={2}>Taxable HRA Calculation</th>
+                </tr>
+                <tr className="lasttd">
+                  <td>Rent Paid</td>
+                  <td className="ps_price">0.00</td>
+                </tr>
+                <tr className="lasttd">
+                  <td>From </td>
+                  <td className="ps_price">0.00</td>
+                </tr>
+                <tr className="lasttd">
+                  <td>To</td>
+                  <td className="ps_price">0.00</td>
+                </tr>
+                <tr className="lasttd">
+                  <td>1. Actual HRA</td>
+                  <td className="ps_price">0.00</td>
+                </tr>
+                <tr className="lasttd">
+                  <td>2. 40% or 50% of Basic</td>
+                  <td className="ps_price">0.00</td>
+                </tr>
+                <tr className="lasttd">
+                  <td>3. Rent - 10% Basic</td>
+                  <td className="ps_price">0.00</td>
+                </tr>
+                <tr className="lasttd">
+                  <td>Least of above is exempt</td>
+                  <td className="ps_price">0.00</td>
+                </tr>
+
+                <tr className="lasttd">
+                  <td>
+                    <strong>Taxable HRA</strong>
+                  </td>
+                  <td className="ps_price">0.00</td>
+                </tr>
+              </table>
+
+              <table border="1" width="100%" className="ad_ps_nestable">
+                <tr className="lasttd">
+                  <th colSpan={2}>TDS Deducted Monthly</th>
+                </tr>
+                <tr className="lasttd">
+                  <th>Month</th>
+                  <th>Amount</th>
+                </tr>
+                {generateTDSMonths().map((month, index) => (
+                  <tr key={index} className="lasttd">
+                    <td>{month}</td>
+                    <td className="ps_price">0.00</td>
+                  </tr>
+                ))}
+                <tr className="lasttd">
+                  <td>
+                    <strong>Total</strong>
+                  </td>
+                  <td className="ps_price">0.00</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
         </table>
-
-        <div className="ad_ps_summary">
-          <p><strong>Current Gross Pay:</strong> ₹{payslip.salary}</p>
-          <p><strong>Current Net Pay:</strong> ₹{payslip.netPay}</p>
-          <p><strong>YTD Gross Total Pay:</strong> ₹{payslip.salary * 2}</p>
-          <p><strong>YTD Net Total Pay:</strong> ₹{payslip.netPay * 2}</p>
-        </div>*/}
-      </div> 
-
-      <div className="ad_ps_download_btn">
-        <button onClick={handleDownload}>Download as PDF</button>
+        <div className="ad_ps_foottext">
+          Personal Note: This is a system generated payslip, does not require
+          any signature.
+        </div>
       </div>
+      <button className="ad_ps_download_btn" onClick={handleDownload}>
+        Download PDF
+      </button>
+      <button className="ad_ps_download_btn" onClick={handleBack}>
+        Back
+      </button>
     </div>
   );
 };
