@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './AdminEmployeedetails.css';
-import './admin.css';
+
 
 const AdminEmployeedetails = () => {
   const { id } = useParams();

@@ -12,7 +12,7 @@
     padding-bottom: 10px;
   }
   .ad_ps_logo {
-    height: 40px;
+    height: 70px;
   }
   .ad_ps_title {
     font-weight: bold;
@@ -94,14 +94,24 @@
     
   }
 
-  
+  .ad_ps_download_btncon{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 20px;
+  }
   .ad_ps_download_btn {
     text-align: center;
-    margin-top: 30px;
+    border: none;
     background-color: blue;
     color: white;
     padding: 5px 10px;
-    border: none;
+    border-radius: 3px;
+    
+  }
+  .ad_ps_download_btn:hover{
+    background-color: rgb(3, 3, 116);
   }
   
 

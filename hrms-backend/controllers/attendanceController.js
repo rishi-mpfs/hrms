@@ -196,3 +196,60 @@ exports.getMyMonthlyAttendance = async (req, res) => {
     res.status(500).json({ error: 'Error fetching your attendance', details: err.message });
   }
 };
+exports.getTodayAttendanceStats = async (req, res) => {
+  try {
+    const today = moment().format('YYYY-MM-DD');
+
+    // Get all non-admin users
+    const allUsers = await User.findAll({
+      where: {
+        role: 'employee' // Only fetch employees
+      },
+      attributes: ['id', 'name', 'email']
+    });
+
+    // Get today's attendance
+    const todaysAttendance = await Attendance.findAll({
+      where: {
+        date: today
+      },
+      attributes: ['userId', 'status']
+    });
+
+    const attendanceMap = new Map();
+    todaysAttendance.forEach(record => {
+      attendanceMap.set(record.userId, record.status);
+    });
+
+    let presentCount = 0;
+    let absentCount = 0;
+    const absentList = [];
+
+    allUsers.forEach(user => {
+      const status = attendanceMap.get(user.id);
+      if (status === 'present' || status === 'late') {
+        presentCount++;
+      } else {
+        absentCount++;
+        absentList.push({
+          id: user.id,
+          name: user.name,
+          email: user.email
+        });
+      }
+    });
+
+    res.json({
+      date: today,
+      presentCount,
+      absentCount,
+      absentList
+    });
+
+  } catch (err) {
+    res.status(500).json({
+      error: 'Failed to fetch today\'s attendance stats',
+      details: err.message
+    });
+  }
+};

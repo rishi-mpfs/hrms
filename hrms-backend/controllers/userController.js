@@ -144,3 +144,22 @@ exports.deleteUser = async (req, res) => {
     res.status(500).json({ error: 'Failed to delete user' });
   }
 };
+
+
+// Get count of all non-admin employees
+exports.getEmployeeCount = async (req, res) => {
+  try {
+    const employeeCount = await User.count({
+      where: {
+        role: {
+          [require('sequelize').Op.ne]: 'admin', // not equal to 'admin'
+        },
+      },
+    });
+
+    res.json({ employeeCount });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to fetch employee count' });
+  }
+};

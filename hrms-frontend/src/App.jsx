@@ -6,6 +6,7 @@ import RedirectHome from './routes/RedirectHome';
 import Login from './pages/auth/Login';
 import AdminRoutes from './routes/AdminRoutes';
 import EmployeeRoutes from './routes/EmployeeRoutes';
+import './App.css';
 
 const App = () => {
   return (

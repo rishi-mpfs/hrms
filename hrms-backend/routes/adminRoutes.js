@@ -16,6 +16,7 @@ router.get('/user/:id', userController.getUserById);
 router.post('/user', userController.createUser);
 router.put('/user/:id', userController.updateUser);
 router.delete('/user/:id', userController.deleteUser);
+router.get('/employeecount',userController.getEmployeeCount);
 
 router.post('/department', departmentController.createDepartment);
 router.get('/department', departmentController.getAllDepartments);
@@ -26,10 +27,12 @@ router.delete('/department/:id', departmentController.deleteDepartment);
 router.get('/attendance/:month',attendanceController.getAllUsersAttendanceSummary);
 router.get('/attendence/:userId/month',attendanceController.getUserMonthlyAttendance);
 router.put('/attendance/:id',attendanceController.updateAttendance);
+router.get('/attendancestates',attendanceController.getTodayAttendanceStats);
 // router.get('/attendance/user/:userId',attendanceController.getMyMonthlyAttendance);
 
 router.get('/leaves',leaveController.getAllLeaves);
 router.put('/leave/:id',leaveController.updateLeaveStatus);
+router.get('/leave-pendingcount',leaveController.getPendingLeaveCount);
 
 router.get('/payroll', payrollController.getPayrollGenerationStatus);
 router.post('/payroll',payrollController.generatePayroll);

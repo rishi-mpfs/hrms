@@ -226,6 +226,7 @@ const PayslipPage = () => {
           <tr>
             <td width="40%" valign="top">
               <table border="1" width="100%" className="ad_ps_nestable">
+              <tbody>
                 <tr className="lasttd">
                   <th>Description</th>
                   <th>Gross</th>
@@ -337,6 +338,7 @@ const PayslipPage = () => {
                     <strong>0.00</strong>
                   </td>
                 </tr>
+                </tbody>
               </table>
             </td>
 
@@ -430,12 +432,14 @@ const PayslipPage = () => {
           any signature.
         </div>
       </div>
-      <button className="ad_ps_download_btn" onClick={handleDownload}>
-        Download PDF
-      </button>
-      <button className="ad_ps_download_btn" onClick={handleBack}>
-        Back
-      </button>
+      <div className="ad_ps_download_btncon">
+        <button className="ad_ps_download_btn" onClick={handleDownload}>
+          Download PDF
+        </button>
+        <button className="ad_ps_download_btn" onClick={handleBack}>
+          Back
+        </button>
+      </div>
     </div>
   );
 };

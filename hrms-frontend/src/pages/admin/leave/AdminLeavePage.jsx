@@ -47,10 +47,10 @@ const AdminLeavePage = () => {
 
   return (
     <div className="us_lv_container">
-      <h2 className="us_lv_heading">Admin Leave Management</h2>
+      <h2 className="us_lv_heading">Leave Management</h2>
 
       <div className="us_lv_filter">
-        <label className="us_lv_filter_label">Filter:</label>
+        {/* <label className="us_lv_filter_label">Filter:</label> */}
         <select
           className="us_lv_filter_select"
           value={filter}

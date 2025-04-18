@@ -1,0 +1,69 @@
+.ad_db_dashboard {
+    padding: 1rem;
+
+    
+  }
+  
+  .ad_db_title {
+    font-size: var(--title);
+    margin-bottom: 1.5rem;
+  }
+  
+  .ad_db_cards {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .ad_db_card {
+    background: var(--con);
+    padding: 1rem;
+    border-radius: 8px;
+    min-width: 200px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  }
+  
+  .ad_db_card_title {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .ad_db_card_value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--colortext);
+  }
+  
+  .ad_db_card_subvalue {
+    font-size: 1rem;
+    margin: 0.25rem 0;
+  }
+  
+  .ad_db_absent_list {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background-color: white;
+    width: 40%;
+    border-radius: 8px;
+  }
+  
+  .ad_db_section_title {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+  }
+  
+  .ad_db_list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .ad_db_list_item {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .ad_db_nodata {
+    color: green;
+    font-style: italic;
+  }
+  

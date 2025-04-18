@@ -1,9 +1,9 @@
 .us_lv_container {
-    padding: 20px;
+    padding: 1rem;
   }
   
   .us_lv_heading {
-    font-size: 24px;
+    font-size: var(--title);
     margin-bottom: 20px;
   }
   

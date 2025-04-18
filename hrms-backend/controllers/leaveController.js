@@ -90,3 +90,17 @@ exports.updateLeaveStatus = async (req, res) => {
     res.status(500).json({ error: 'Failed to update leave status', details: error.message });
   }
 };
+
+
+// Count of pending leave approvals
+exports.getPendingLeaveCount = async (req, res) => {
+  try {
+    const pendingCount = await Leave.count({
+      where: { status: 'pending' },
+    });
+
+    res.json({ pendingCount });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch pending leave count', details: error.message });
+  }
+};
